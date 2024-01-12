@@ -1,10 +1,28 @@
-# create-svelte
-
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+# Campaign Manager
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+1. Run the install command (make sure to have [pnpm installed](https://pnpm.io))
+
+```bash
+pnpm i
+```
+
+2. Copy the .env.example file to .env, change variables if you need to, otherwise it will run with the local Docker setup
+
+3. Start up the local MySQL server if you are using Docker
+
+```bash
+docker-compose up -d
+```
+
+4. Push the database schema
+
+```bash
+pnpm db:push
+```
+
+5. Run the SvelteKit project!
 
 ```bash
 pnpm run dev
@@ -13,12 +31,4 @@ pnpm run dev
 pnpm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-pnpm run build
-```
-
-You can preview the production build with `pnpm run preview`.
+Hooray, you are now running the dev environment locally!
