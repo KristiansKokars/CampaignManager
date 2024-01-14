@@ -1,4 +1,11 @@
-import { bigint, boolean, mysqlTableCreator, varchar } from 'drizzle-orm/mysql-core';
+import {
+	bigint,
+	boolean,
+	mysqlEnum,
+	mysqlTableCreator,
+	text,
+	varchar
+} from 'drizzle-orm/mysql-core';
 
 export const tablePrefix = 'cm_';
 
@@ -42,4 +49,21 @@ export const userSession = mysqlTable('user_session', {
 	idleExpires: bigint('idle_expires', {
 		mode: 'number'
 	}).notNull()
+});
+
+export const campaign = mysqlTable('campaign', {
+	id: varchar('id', { length: 256 }).primaryKey(),
+	dungeonMasterId: varchar('dungeon_master_id', { length: 15 })
+		.notNull()
+		.references(() => user.id),
+	name: varchar('name', { length: 256 }).notNull(),
+	status: mysqlEnum('status', [
+		'not_started',
+		'started',
+		'paused',
+		'ongoing',
+		'finished'
+	]).notNull(),
+	description: text('description'),
+	bannerUrl: varchar('banner_url', { length: 256 })
 });

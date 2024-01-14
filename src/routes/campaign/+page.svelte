@@ -2,9 +2,20 @@
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 
 	export let data;
+
+	$: areCampaignsEmpty = data.campaigns.length === 0;
 </script>
 
-<GlassCard class="flex-col">
-	<p>{data.username ?? 'Not logged in'}</p>
-	<p>Empty</p>
-</GlassCard>
+<div class="flex flex-col gap-10">
+	{#if areCampaignsEmpty}
+		<p>No campaigns yet. Make one!</p>
+	{:else}
+		<div class="flex flex-col gap-2">
+			{#each data.campaigns as campaign (campaign.id)}
+				<GlassCard class="bg-red-700 bg-opacity-40">
+					<p>{campaign.name}</p>
+				</GlassCard>
+			{/each}
+		</div>
+	{/if}
+</div>
