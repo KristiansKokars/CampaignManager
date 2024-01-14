@@ -21,20 +21,16 @@ export const actions: Actions = {
 			}));
 			return fail(400, { error: true, allFieldErrors });
 		}
-		console.log('1');
 
 		const { email, password } = parsedFormData.data;
 		try {
-			console.log('4');
 			const userKey = await auth.useKey('email', email.toLowerCase(), password);
 			const session = await auth.createSession({
 				userId: userKey.userId,
 				attributes: {}
 			});
-			console.log('2');
 
 			locals.auth.setSession(session);
-			console.log('3');
 		} catch (e) {
 			if (
 				e instanceof LuciaError &&
