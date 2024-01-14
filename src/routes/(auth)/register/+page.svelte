@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import Button from '$src/lib/components/Button.svelte';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 	import InputField from '$src/lib/components/InputField.svelte';
 	import type { ActionData } from './$types';
@@ -13,7 +14,7 @@
 		<InputField type="email" name="email" id="email">Email</InputField>
 		<InputField name="username" id="username">Username</InputField>
 		<InputField type="password" name="password" id="password">Password</InputField>
-		<button type="submit">Submit</button>
+		<Button>Register</Button>
 	</form>
 	{#if form?.error}
 		{#each form?.allFieldErrors as fieldError}

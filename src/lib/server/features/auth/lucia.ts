@@ -5,6 +5,8 @@ import { dev } from '$app/environment';
 import { mysql2 } from '@lucia-auth/adapter-mysql';
 import { connection } from '$src/lib/server/data/db';
 import { getTableConfig } from 'drizzle-orm/mysql-core';
+import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '$env/static/private';
+import { github } from '@lucia-auth/oauth/providers';
 
 export const auth = lucia({
 	env: dev ? 'DEV' : 'PROD',
@@ -22,6 +24,11 @@ export const auth = lucia({
 			emailVerified: Boolean(data.email_verified) // MySQL stores booleans as 0 or 1, so we do a conversion here
 		};
 	}
+});
+
+export const githubAuth = github(auth, {
+	clientId: GITHUB_CLIENT_ID,
+	clientSecret: GITHUB_CLIENT_SECRET
 });
 
 export type Auth = typeof auth;

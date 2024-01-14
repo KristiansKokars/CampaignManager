@@ -8,6 +8,9 @@ dependencies:
   '@lucia-auth/adapter-mysql':
     specifier: ^2.1.0
     version: 2.1.0(lucia@2.7.6)(mysql2@3.6.5)
+  '@lucia-auth/oauth':
+    specifier: ^3.5.1
+    version: 3.5.1(lucia@2.7.6)
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
@@ -666,6 +669,14 @@ packages:
     dependencies:
       lucia: 2.7.6
       mysql2: 3.6.5
+    dev: false
+
+  /@lucia-auth/oauth@3.5.1(lucia@2.7.6):
+    resolution: {integrity: sha512-GEohSpTt7M8LQgmA+wFuoq/Pb8afos4kZlFXTmmn8n+hUnV/40dEP0C4X735PbMo+QW9JIFkOggTfHDhB60XhA==}
+    peerDependencies:
+      lucia: ^2.0.0
+    dependencies:
+      lucia: 2.7.6
     dev: false
 
   /@mapbox/node-pre-gyp@1.0.11:

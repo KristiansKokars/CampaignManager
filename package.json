@@ -42,6 +42,7 @@
 	"type": "module",
 	"dependencies": {
 		"@lucia-auth/adapter-mysql": "^2.1.0",
+		"@lucia-auth/oauth": "^3.5.1",
 		"clsx": "^2.1.0",
 		"dotenv": "^16.3.1",
 		"drizzle-orm": "^0.29.3",

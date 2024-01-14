@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import Button from '$src/lib/components/Button.svelte';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 	import InputField from '$src/lib/components/InputField.svelte';
 	import type { ActionData } from './$types';
+	import LinkButton from '$src/lib/components/LinkButton.svelte';
+	import GitHubIcon from '$src/lib/icons/GitHubIcon.svelte';
+	import MailIcon from '$src/lib/icons/MailIcon.svelte';
 
 	export let form: ActionData;
 </script>
@@ -12,8 +16,12 @@
 	<form method="post" use:enhance class="flex w-full flex-col gap-4">
 		<InputField type="email" name="email" id="email">Email</InputField>
 		<InputField type="password" name="password" id="password">Password</InputField>
-		<button type="submit">Submit</button>
+		<Button><MailIcon />Login with Email</Button>
+		<LinkButton href="/login/github" class="flex justify-center"
+			><GitHubIcon />Login with GitHub</LinkButton
+		>
 	</form>
+
 	{#if form?.message}
 		<p class="font-bold text-red-400">{form?.message}</p>
 	{/if}
