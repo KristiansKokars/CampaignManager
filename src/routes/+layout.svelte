@@ -8,7 +8,7 @@
 </svelte:head>
 
 <div
-	class="flex min-h-lvh flex-col bg-slate-900 bg-[url(img/dragon.jpg)] bg-cover bg-center object-fill text-white"
+	class="flex min-h-lvh flex-col bg-slate-900 bg-[url($lib/img/dragon.jpg)] bg-cover bg-center object-fill text-white"
 >
 	<Navbar />
 	<main class="flex grow items-center justify-center">
