@@ -18,4 +18,8 @@
 			{/each}
 		</div>
 	{/if}
+
+	<a href="/campaign/new" class="rounded-md bg-white p-3 text-black hover:bg-gray-100"
+		>Make a new campaign</a
+	>
 </div>
