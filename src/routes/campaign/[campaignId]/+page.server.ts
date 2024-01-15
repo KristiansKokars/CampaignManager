@@ -1,7 +1,5 @@
-import { db } from '$src/lib/server/data/db';
-import { campaign } from '$src/lib/server/data/schema';
+import { getCampaign } from '$src/lib/server/data/queries/get-campaign';
 import { error, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
 
 export async function load({ locals, params }) {
 	const session = await locals.auth.validate();
@@ -13,8 +11,4 @@ export async function load({ locals, params }) {
 	return {
 		campaign: campaign
 	};
-}
-
-async function getCampaign(campaignId: string) {
-	return (await db.select().from(campaign).where(eq(campaign.id, campaignId)).limit(1))[0];
 }
