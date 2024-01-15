@@ -13,7 +13,7 @@
 		<div class="flex flex-col gap-2">
 			{#each data.campaigns as campaign (campaign.id)}
 				<GlassCard class="bg-red-700 bg-opacity-40">
-					<p>{campaign.name}</p>
+					<a href={`campaign/${campaign.id}`}>{campaign.name}</a>
 				</GlassCard>
 			{/each}
 		</div>
