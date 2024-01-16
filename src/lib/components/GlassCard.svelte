@@ -7,7 +7,7 @@
 
 <div
 	class={cn(
-		'flex rounded-md bg-gray-800 bg-opacity-70 bg-clip-padding p-4 backdrop-blur-sm backdrop-filter',
+		'flex rounded-md bg-gray-800 bg-opacity-70 bg-clip-padding p-4 backdrop-blur backdrop-filter',
 		className
 	)}
 >

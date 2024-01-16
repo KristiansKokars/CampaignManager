@@ -18,7 +18,7 @@
 </script>
 
 <div
-	class="flex h-12 w-full border-b border-gray-800 border-opacity-40 bg-gray-800 bg-opacity-70 bg-clip-padding p-2 backdrop-blur-sm backdrop-filter"
+	class="z-40 flex h-14 w-full border-b border-gray-200/10 border-opacity-40 bg-gray-800 bg-opacity-70 bg-clip-padding p-2 backdrop-blur backdrop-filter"
 >
 	<nav class="mx-auto flex w-full max-w-[90rem] items-center justify-between px-4">
 		<div class="flex gap-x-4">
