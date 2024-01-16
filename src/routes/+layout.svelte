@@ -3,7 +3,7 @@
 	import Footer from '$src/lib/components/Footer.svelte';
 	import Navbar from '$src/lib/components/Navbar.svelte';
 	import Overlap from '$src/lib/components/Overlap.svelte';
-	import DragonImage from '$src/lib/img/dragon.jpg';
+	import DragonImage from '$src/lib/img/dragon.jpg?enhanced';
 
 	export let data;
 </script>
@@ -15,7 +15,7 @@
 <div class="min-h-lvh bg-slate-900 object-fill text-white">
 	<Overlap>
 		<Navbar isLoggedIn={data.isLoggedIn} />
-		<img src={DragonImage} class="h-lvh w-full object-cover object-center" alt="" />
+		<enhanced:img src={DragonImage} class="h-lvh w-full object-cover object-center" alt="" />
 		<main class="flex grow flex-col">
 			<slot />
 		</main>
