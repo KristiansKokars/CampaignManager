@@ -4,10 +4,7 @@
 
 @font-face {
 	font-family: 'Supreme-Variable';
-	src:
-		url('/fonts/Supreme-Variable.woff2') format('woff2'),
-		url('/fonts/Supreme-Variable.woff') format('woff'),
-		url('/fonts/Supreme-Variable.ttf') format('truetype');
+	src: url('/fonts/Supreme-Variable.woff2') format('woff2');
 	font-weight: 100 800;
 	font-display: swap;
 	font-style: normal;
@@ -15,10 +12,7 @@
 
 @font-face {
 	font-family: 'Nunito-Variable';
-	src:
-		url('/fonts/Nunito-Variable.woff2') format('woff2'),
-		url('/fonts/Nunito-Variable.woff') format('woff'),
-		url('/fonts/Nunito-Variable.ttf') format('truetype');
+	src: url('/fonts/Nunito-Variable.woff2') format('woff2');
 	font-weight: 200 1000;
 	font-display: swap;
 	font-style: normal;
