@@ -10,6 +10,7 @@
 
 <svelte:head>
 	<title>Campaign Manager</title>
+	<meta name="description" content="D&D Campaign and Session collaborative note tracker" />
 </svelte:head>
 
 <div class="min-h-lvh bg-slate-900 object-fill text-white">
