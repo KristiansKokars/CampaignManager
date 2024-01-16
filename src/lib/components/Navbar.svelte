@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { cn } from '$src/lib/util/cn';
+	import NavlinkButton from './NavlinkButton.svelte';
 
 	export let isLoggedIn: boolean = false;
 
@@ -18,21 +19,14 @@
 </script>
 
 <div
-	class="z-40 flex h-14 w-full border-b border-gray-200/10 border-opacity-40 bg-gray-800 bg-opacity-70 bg-clip-padding p-2 backdrop-blur backdrop-filter"
+	class="sticky top-0 z-40 flex h-14 border-b border-gray-200/10 border-opacity-40 bg-gray-800 bg-opacity-70 bg-clip-padding p-2 backdrop-blur backdrop-filter"
 >
 	<nav class="mx-auto flex w-full max-w-[90rem] items-center justify-between px-4">
 		<div class="flex gap-x-4">
 			{#each links as link}
-				<a
-					href={link.path}
-					class={cn(
-						'text-white',
-						$page.url.pathname !== link.path &&
-							'hover:text-opacity-8 text-gray-400 text-opacity-90 hover:text-white'
-					)}
+				<NavlinkButton href={link.path} isActive={$page.url.pathname === link.path}
+					>{link.text}</NavlinkButton
 				>
-					{link.text}
-				</a>
 			{/each}
 		</div>
 		{#if !isLoggedIn}

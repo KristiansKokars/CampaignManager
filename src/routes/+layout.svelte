@@ -1,6 +1,9 @@
 <script lang="ts">
 	import '$src/app.css';
+	import Footer from '$src/lib/components/Footer.svelte';
 	import Navbar from '$src/lib/components/Navbar.svelte';
+	import Overlap from '$src/lib/components/Overlap.svelte';
+	import DragonImage from '$src/lib/img/dragon.jpg';
 
 	export let data;
 </script>
@@ -9,11 +12,13 @@
 	<title>Campaign Manager</title>
 </svelte:head>
 
-<div
-	class="flex min-h-lvh flex-col bg-slate-900 bg-[url($lib/img/dragon.jpg)] bg-cover bg-center object-fill text-white"
->
-	<Navbar isLoggedIn={data.isLoggedIn} />
-	<main class="flex grow items-center justify-center">
-		<slot />
-	</main>
+<div class="min-h-lvh bg-slate-900 object-fill text-white">
+	<Overlap>
+		<Navbar isLoggedIn={data.isLoggedIn} />
+		<img src={DragonImage} class="h-lvh w-full object-cover object-center" alt="" />
+		<main class="flex grow flex-col">
+			<slot />
+		</main>
+	</Overlap>
+	<Footer />
 </div>
