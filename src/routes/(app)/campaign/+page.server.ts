@@ -7,7 +7,7 @@ export async function load({ locals }) {
 	const session = await locals.auth.validate();
 	if (!session) redirect(302, '/login');
 
-	const campaigns = await getCampaignsForDM(session.user.userId);
+	const campaigns = getCampaignsForDM(session.user.userId);
 
 	return {
 		username: session.user.username,
