@@ -7,13 +7,13 @@
 	export let data;
 </script>
 
-<GlassCard class="flex-col">
+<GlassCard class="w-full max-w-96 flex-col items-center justify-center break-all">
 	{#if data.campaign}
-		<p>{data.campaign?.name}</p>
+		<h2 class="text-xl font-bold">{data.campaign?.name}</h2>
 		<p>{data.campaign?.description}</p>
-		<form method="POST" action="/campaign/delete?" use:enhance>
+		<form method="POST" action="/campaign/delete?" use:enhance class="py-4">
 			<input type="hidden" name="campaignId" value={data.campaign.id} />
-			<Button>Delete</Button>
+			<Button class="w-full">Delete</Button>
 		</form>
 		<LinkButton href={`/campaign/${data.campaign.id}/edit`}>Edit</LinkButton>
 	{:else}

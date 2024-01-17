@@ -9,7 +9,9 @@
 	];
 </script>
 
-<div class="flex min-h-48 flex-col items-center justify-center gap-y-6 bg-slate-900 py-12">
+<div
+	class="flex min-h-48 flex-col items-center justify-center gap-y-6 bg-slate-900 py-12 text-sm sm:text-base"
+>
 	<div class="mx-auto flex gap-x-16">
 		{#each links as link}
 			<a

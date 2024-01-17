@@ -19,10 +19,10 @@
 </script>
 
 <div
-	class="sticky top-0 z-40 flex h-14 border-b border-gray-200/10 border-opacity-40 bg-gray-800 bg-opacity-70 bg-clip-padding p-2 backdrop-blur backdrop-filter"
+	class="sticky top-0 z-40 flex h-14 border-b border-gray-200/10 border-opacity-40 bg-gray-800 bg-opacity-70 bg-clip-padding p-2 text-sm backdrop-blur backdrop-filter sm:text-base"
 >
 	<nav class="mx-auto flex w-full max-w-[90rem] items-center justify-between px-4">
-		<div class="flex gap-x-4">
+		<div class="flex gap-x-4 sm:gap-x-8">
 			{#each links as link}
 				<NavlinkButton href={link.path} isActive={$page.url.pathname === link.path}
 					>{link.text}</NavlinkButton
@@ -31,7 +31,7 @@
 		</div>
 		{#if !isLoggedIn}
 			<!-- TODO: once Svelte snippets come around, make this into a reusable navlink in this component -->
-			<div class="flex gap-x-4">
+			<div class="flex gap-x-4 sm:gap-x-8">
 				<a
 					href="/login"
 					class={cn(

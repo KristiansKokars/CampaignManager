@@ -7,7 +7,7 @@
 	export let form: ActionData;
 </script>
 
-<GlassCard class="w-96 flex-col items-center justify-center">
+<GlassCard class="w-full max-w-96 flex-col items-center justify-center break-all">
 	<h1 class="text-2xl font-bold">New Campaign</h1>
 	<form method="post" use:enhance class="flex w-full flex-col gap-4">
 		<InputField name="name" id="name">Name*</InputField>

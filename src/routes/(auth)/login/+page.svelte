@@ -11,7 +11,7 @@
 	export let form: ActionData;
 </script>
 
-<GlassCard class="w-96 flex-col items-center justify-center">
+<GlassCard class="w-full max-w-96 flex-col items-center justify-center">
 	<h1 class="text-2xl font-bold">Login</h1>
 	<form method="post" use:enhance class="flex w-full flex-col gap-4">
 		<InputField type="email" name="email" id="email">Email</InputField>
