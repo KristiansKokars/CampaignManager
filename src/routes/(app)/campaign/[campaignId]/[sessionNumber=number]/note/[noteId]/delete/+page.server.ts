@@ -1,4 +1,4 @@
-import { deleteNote, getAuthorIdForNote } from '$src/lib/server/data/queries/campaign-notes';
+import { deleteNoteFromDB } from '$src/lib/server/data/queries/campaign-notes';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
 
@@ -29,12 +29,3 @@ export const actions: Actions = {
 		throw redirect(302, `/campaign/${campaignId}/${sessionNumber}`);
 	}
 };
-
-async function deleteNoteFromDB(noteId: string, userId: string): Promise<boolean> {
-	const authorIdForNote = await getAuthorIdForNote(noteId);
-	if (authorIdForNote !== userId) return false;
-
-	await deleteNote(noteId, userId);
-
-	return true;
-}

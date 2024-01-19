@@ -1,7 +1,4 @@
-import {
-	deleteCampaign,
-	getDungeonMasterIdForCampaign
-} from '$src/lib/server/data/queries/campaign';
+import { deleteCampaignFromDB } from '$src/lib/server/data/queries/campaign';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
 
@@ -30,11 +27,3 @@ export const actions: Actions = {
 		throw redirect(302, '/campaign');
 	}
 };
-
-async function deleteCampaignFromDB(campaignId: string, userId: string): Promise<boolean> {
-	const dungeonMasterIdForCampaign = await getDungeonMasterIdForCampaign(campaignId);
-	if (dungeonMasterIdForCampaign !== userId) return false;
-
-	await deleteCampaign(campaignId, userId);
-	return true;
-}

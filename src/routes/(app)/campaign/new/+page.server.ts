@@ -1,15 +1,5 @@
-import { db } from '$src/lib/server/data/db';
-import { campaign } from '$src/lib/server/data/schema';
+import { createCampaignSchema, createNewCampaign } from '$src/lib/server/data/queries/campaign';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
-import { z } from 'zod';
-import { nanoid } from 'nanoid';
-
-const createCampaignSchema = z.object({
-	name: z.string().max(254),
-	description: z.string().nullable()
-});
-
-type CreateCampaignData = z.infer<typeof createCampaignSchema>;
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -29,16 +19,7 @@ export const actions: Actions = {
 		}
 
 		await createNewCampaign(parsedFormData.data, session.user.userId);
+
 		redirect(302, '/campaign');
 	}
 };
-
-async function createNewCampaign(createCampaignData: CreateCampaignData, dungeonMasterId: string) {
-	await db.insert(campaign).values({
-		id: nanoid(),
-		name: createCampaignData.name,
-		description: createCampaignData.description,
-		dungeonMasterId: dungeonMasterId,
-		status: 'not_started'
-	});
-}

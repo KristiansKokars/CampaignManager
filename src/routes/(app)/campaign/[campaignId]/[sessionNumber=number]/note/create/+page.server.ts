@@ -1,9 +1,6 @@
-import { db } from '$src/lib/server/data/db.js';
 import { getCampaign } from '$src/lib/server/data/queries/campaign';
-import { campaignNotes } from '$src/lib/server/data/schema.js';
 import { redirect, error, type Actions, fail } from '@sveltejs/kit';
-import { z } from 'zod';
-import { nanoid } from 'nanoid';
+import { createNote, createNoteSchema } from '$src/lib/server/data/queries/campaign-notes.js';
 
 export async function load({ locals, params }) {
 	const session = await locals.auth.validate();
@@ -20,13 +17,6 @@ export async function load({ locals, params }) {
 	};
 }
 
-const createNoteSchema = z.object({
-	campaignId: z.string(),
-	sessionNumber: z.string(),
-	title: z.string().optional(),
-	text: z.string()
-});
-
 export const actions: Actions = {
 	default: async ({ locals, request }) => {
 		const session = await locals.auth.validate();
@@ -42,17 +32,9 @@ export const actions: Actions = {
 			}));
 			return fail(400, { error: true, allFieldErrors });
 		}
-		const { campaignId, title, text, sessionNumber } = parsedFormData.data;
+		const { campaignId } = parsedFormData.data;
 
-		// TODO: add user permissions check
-		await db.insert(campaignNotes).values({
-			id: nanoid(),
-			title: title,
-			text: text,
-			authorId: session.user.userId,
-			sessionNumber: sessionNumber,
-			campaignId: campaignId
-		});
+		await createNote(parsedFormData.data, session.user.userId);
 
 		redirect(302, `/campaign/${campaignId}`);
 	}

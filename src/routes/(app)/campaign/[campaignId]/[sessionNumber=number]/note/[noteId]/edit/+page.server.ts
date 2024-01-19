@@ -1,9 +1,9 @@
-import { db } from '$src/lib/server/data/db';
-import { getNote } from '$src/lib/server/data/queries/campaign-notes.js';
-import { campaignNotes } from '$src/lib/server/data/schema';
+import {
+	editExistingNote,
+	editNoteSchema,
+	getNote
+} from '$src/lib/server/data/queries/campaign-notes.js';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { z } from 'zod';
 
 export async function load({ locals, params }) {
 	const session = await locals.auth.validate();
@@ -46,33 +46,3 @@ export const actions: Actions = {
 		redirect(302, `/campaign/${campaignId}/${sessionNumber}/note/${noteId}`);
 	}
 };
-
-async function editExistingNote(editNoteData: EditNoteData, userId: string): Promise<boolean> {
-	const noteToEdit = (
-		await db
-			.select({ authorId: campaignNotes.authorId })
-			.from(campaignNotes)
-			.where(eq(campaignNotes.id, editNoteData.noteId))
-			.limit(0)
-	)[0];
-	if (noteToEdit?.authorId !== userId) return false;
-
-	await db
-		.update(campaignNotes)
-		.set({
-			title: editNoteData.title,
-			text: editNoteData.text
-		})
-		.where(eq(campaignNotes.id, editNoteData.noteId));
-	return true;
-}
-
-const editNoteSchema = z.object({
-	noteId: z.string(),
-	campaignId: z.string(),
-	sessionNumber: z.string(),
-	title: z.string().max(254),
-	text: z.string()
-});
-
-type EditNoteData = z.infer<typeof editNoteSchema>;

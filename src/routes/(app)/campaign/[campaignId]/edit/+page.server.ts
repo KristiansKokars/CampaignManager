@@ -1,9 +1,9 @@
-import { db } from '$src/lib/server/data/db';
-import { getCampaign } from '$src/lib/server/data/queries/campaign';
-import { campaign } from '$src/lib/server/data/schema';
+import {
+	editCampaignSchema,
+	editExistingCampaign,
+	getCampaign
+} from '$src/lib/server/data/queries/campaign';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { z } from 'zod';
 
 export async function load({ locals, params }) {
 	const session = await locals.auth.validate();
@@ -42,35 +42,3 @@ export const actions: Actions = {
 		redirect(302, `/campaign/${parsedFormData.data.campaignId}`);
 	}
 };
-
-async function editExistingCampaign(
-	editCampaignData: EditCampaignData,
-	userId: string
-): Promise<boolean> {
-	const campaignToEdit = (
-		await db
-			.select({ dungeonMasterId: campaign.dungeonMasterId })
-			.from(campaign)
-			.where(eq(campaign.id, editCampaignData.campaignId))
-			.limit(0)
-	)[0];
-	if (campaignToEdit?.dungeonMasterId !== userId) return false;
-
-	await db
-		.update(campaign)
-		.set({
-			name: editCampaignData.name,
-			description: editCampaignData.description,
-			status: 'not_started'
-		})
-		.where(eq(campaign.id, editCampaignData.campaignId));
-	return true;
-}
-
-const editCampaignSchema = z.object({
-	campaignId: z.string(),
-	name: z.string().max(254),
-	description: z.string().nullable()
-});
-
-type EditCampaignData = z.infer<typeof editCampaignSchema>;

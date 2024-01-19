@@ -1,7 +1,5 @@
-import { db } from '$src/lib/server/data/db.js';
-import { campaign } from '$src/lib/server/data/schema.js';
+import { getCampaignsForDM } from '$src/lib/server/data/queries/campaign';
 import { redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
 
 export async function load({ locals }) {
 	const session = await locals.auth.validate();
@@ -13,8 +11,4 @@ export async function load({ locals }) {
 		username: session.user.username,
 		campaigns: campaigns
 	};
-}
-
-async function getCampaignsForDM(userId: string) {
-	return await db.select().from(campaign).where(eq(campaign.dungeonMasterId, userId));
 }
