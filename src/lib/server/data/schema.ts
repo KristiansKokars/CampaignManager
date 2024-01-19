@@ -1,8 +1,12 @@
+import { relations } from 'drizzle-orm';
 import {
 	bigint,
 	boolean,
+	date,
+	int,
 	mysqlEnum,
 	mysqlTableCreator,
+	primaryKey,
 	text,
 	varchar
 } from 'drizzle-orm/mysql-core';
@@ -67,3 +71,47 @@ export const campaign = mysqlTable('campaign', {
 	description: text('description'),
 	bannerUrl: varchar('banner_url', { length: 256 })
 });
+
+export const campaignRelations = relations(campaign, ({ many }) => ({
+	sessions: many(campaignSession)
+}));
+
+export const campaignSession = mysqlTable(
+	'campaign_session',
+	{
+		sessionNumber: int('session_number').notNull(),
+		campaignId: varchar('campaign_id', { length: 256 }).notNull(),
+		date: date('date')
+	},
+	(table) => {
+		return {
+			pk: primaryKey({ columns: [table.campaignId, table.sessionNumber] })
+		};
+	}
+);
+
+export const campaignSessionRelations = relations(campaignSession, ({ one, many }) => ({
+	campaign: one(campaign, {
+		fields: [campaignSession.campaignId],
+		references: [campaign.id]
+	}),
+	notes: many(campaignNotes)
+}));
+
+export const campaignNotes = mysqlTable('campaign_note', {
+	id: varchar('id', { length: 256 }).primaryKey(),
+	title: varchar('title', { length: 256 }),
+	text: text('text').notNull(),
+	sessionNumber: int('session_number').notNull(),
+	campaignId: varchar('campaign_id', { length: 256 }).notNull(),
+	authorId: varchar('author_id', { length: 15 })
+		.notNull()
+		.references(() => user.id)
+});
+
+export const campaignNotesRelations = relations(campaignNotes, ({ one }) => ({
+	campaignSession: one(campaignSession, {
+		fields: [campaignNotes.sessionNumber, campaignNotes.campaignId],
+		references: [campaignSession.sessionNumber, campaignSession.campaignId]
+	})
+}));

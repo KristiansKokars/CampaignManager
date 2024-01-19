@@ -1,5 +1,5 @@
 import { db } from '$src/lib/server/data/db';
-import { getCampaign } from '$src/lib/server/data/queries/get-campaign';
+import { getCampaign } from '$src/lib/server/data/queries/campaign';
 import { campaign } from '$src/lib/server/data/schema';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';

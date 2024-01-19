@@ -1,7 +1,8 @@
-import { db } from '$src/lib/server/data/db';
-import { campaign } from '$src/lib/server/data/schema';
+import {
+	deleteCampaign,
+	getDungeonMasterIdForCampaign
+} from '$src/lib/server/data/queries/campaign';
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 const deleteCampaignSchema = z.object({
@@ -31,17 +32,9 @@ export const actions: Actions = {
 };
 
 async function deleteCampaignFromDB(campaignId: string, userId: string): Promise<boolean> {
-	const campaignToDelete = (
-		await db
-			.select({ dungeonMasterId: campaign.dungeonMasterId })
-			.from(campaign)
-			.where(eq(campaign.id, campaignId))
-			.limit(0)
-	)[0];
-	if (campaignToDelete?.dungeonMasterId !== userId) return false;
+	const dungeonMasterIdForCampaign = await getDungeonMasterIdForCampaign(campaignId);
+	if (dungeonMasterIdForCampaign !== userId) return false;
 
-	await db
-		.delete(campaign)
-		.where(and(eq(campaign.id, campaignId), eq(campaign.dungeonMasterId, userId)));
+	await deleteCampaign(campaignId, userId);
 	return true;
 }

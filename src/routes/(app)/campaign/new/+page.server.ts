@@ -2,6 +2,7 @@ import { db } from '$src/lib/server/data/db';
 import { campaign } from '$src/lib/server/data/schema';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
+import { nanoid } from 'nanoid';
 
 const createCampaignSchema = z.object({
 	name: z.string().max(254),
@@ -34,7 +35,7 @@ export const actions: Actions = {
 
 async function createNewCampaign(createCampaignData: CreateCampaignData, dungeonMasterId: string) {
 	await db.insert(campaign).values({
-		id: crypto.randomUUID().toString(),
+		id: nanoid(),
 		name: createCampaignData.name,
 		description: createCampaignData.description,
 		dungeonMasterId: dungeonMasterId,

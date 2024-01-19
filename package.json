@@ -25,7 +25,7 @@
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.16",
-		"drizzle-kit": "^0.20.11",
+		"drizzle-kit": "^0.20.13",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
@@ -49,6 +49,7 @@
 		"drizzle-orm": "^0.29.3",
 		"lucia": "^2.7.6",
 		"mysql2": "^3.6.5",
+		"nanoid": "^5.0.4",
 		"tailwind-merge": "^2.2.0",
 		"zod": "^3.22.4"
 	}
