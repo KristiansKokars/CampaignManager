@@ -18,7 +18,10 @@
 
 <div class="min-h-lvh bg-slate-900 object-fill text-white">
 	<Overlap>
-		<Navbar isLoggedIn={data.isLoggedIn} />
+		<Navbar
+			isLoggedIn={data.isLoggedIn}
+			hasUncheckedCampaignInvites={data.hasUncheckedCampaignInvites}
+		/>
 		<enhanced:img src={DragonImage} class="h-lvh w-full object-cover object-center" alt="" />
 		<main class="flex grow flex-col">
 			<slot />

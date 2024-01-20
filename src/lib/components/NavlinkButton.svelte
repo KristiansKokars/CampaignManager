@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { cn } from '$src/lib/util/cn';
 
 	export let href: string;

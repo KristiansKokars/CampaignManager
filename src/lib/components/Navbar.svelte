@@ -2,9 +2,11 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { cn } from '$src/lib/util/cn';
+	import InviteButton from './InviteButton.svelte';
 	import NavlinkButton from './NavlinkButton.svelte';
 
 	export let isLoggedIn: boolean = false;
+	export let hasUncheckedCampaignInvites: boolean;
 
 	const links = [
 		{
@@ -29,9 +31,10 @@
 				>
 			{/each}
 		</div>
-		{#if !isLoggedIn}
-			<!-- TODO: once Svelte snippets come around, make this into a reusable navlink in this component -->
-			<div class="flex gap-x-4 sm:gap-x-8">
+		<div class="flex gap-x-4 sm:gap-x-8">
+			<InviteButton {hasUncheckedCampaignInvites} />
+			{#if !isLoggedIn}
+				<!-- TODO: once Svelte snippets come around, make this into a reusable navlink in this component -->
 				<a
 					href="/login"
 					class={cn(
@@ -52,13 +55,13 @@
 				>
 					Register
 				</a>
-			</div>
-		{:else}
-			<form method="POST" class="flex gap-x-4" action="/signout?" use:enhance>
-				<button class="hover:text-opacity-8 text-red-400 text-opacity-90 hover:text-red-300">
-					Sign out
-				</button>
-			</form>
-		{/if}
+			{:else}
+				<form method="POST" class="flex gap-x-4" action="/signout?" use:enhance>
+					<button class="hover:text-opacity-8 text-red-400 text-opacity-90 hover:text-red-300">
+						Sign out
+					</button>
+				</form>
+			{/if}
+		</div>
 	</nav>
 </div>
