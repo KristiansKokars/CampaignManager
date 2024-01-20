@@ -3,10 +3,12 @@ import { campaign, campaignInvite } from '$src/lib/server/data/schema';
 import { and, eq } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
+import { uploadBannerImage, deleteBannerImage } from '$src/lib/server/data/image-files';
 
 export const createCampaignSchema = z.object({
 	name: z.string().max(254),
-	description: z.string().nullable()
+	description: z.string().nullable(),
+	banner: z.instanceof(Blob)
 });
 export type CreateCampaignData = z.infer<typeof createCampaignSchema>;
 
@@ -14,12 +16,21 @@ export async function createNewCampaign(
 	createCampaignData: CreateCampaignData,
 	dungeonMasterId: string
 ) {
+	const campaignId = nanoid();
+	let bannerUrl = '';
+	try {
+		bannerUrl = await uploadBannerImage(campaignId, createCampaignData.banner as File);
+	} catch (e) {
+		console.error(`Could not upload picture for ${createCampaignData.name}, skipping...`);
+	}
+
 	await db.insert(campaign).values({
-		id: nanoid(),
+		id: campaignId,
 		name: createCampaignData.name,
 		description: createCampaignData.description,
 		dungeonMasterId: dungeonMasterId,
-		status: 'not_started'
+		status: 'not_started',
+		bannerUrl: bannerUrl
 	});
 }
 
@@ -108,6 +119,18 @@ export async function editExistingCampaign(
 export async function deleteCampaignFromDB(campaignId: string, userId: string): Promise<boolean> {
 	const dungeonMasterIdForCampaign = await getDungeonMasterIdForCampaign(campaignId);
 	if (dungeonMasterIdForCampaign !== userId) return false;
+
+	const bannerUrl = (
+		await db
+			.select({ bannerUrl: campaign.bannerUrl })
+			.from(campaign)
+			.where(eq(campaign.id, campaignId))
+			.limit(1)
+	)[0]?.bannerUrl;
+
+	if (bannerUrl) {
+		await deleteBannerImage(bannerUrl, campaignId);
+	}
 
 	await db
 		.delete(campaign)

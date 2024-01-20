@@ -54,6 +54,9 @@
 
 <GlassCard class="w-full max-w-96 flex-col items-center justify-center break-all">
 	{#if data.campaign}
+		{#if data.campaign.bannerUrl}
+			<img src={data.campaign.bannerUrl} alt="Campaign Banner" />
+		{/if}
 		<h2 class="text-xl font-bold">{data.campaign?.name}</h2>
 		<p>{data.campaign?.description}</p>
 		{#if data.isDungeonMasterForCampaign}
