@@ -1,5 +1,5 @@
 import { db } from '$src/lib/server/data/db';
-import { campaign } from '$src/lib/server/data/schema';
+import { campaign, campaignInvite } from '$src/lib/server/data/schema';
 import { and, eq } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
@@ -34,21 +34,44 @@ export async function getDungeonMasterIdForCampaign(campaignId: string) {
 	return campaignToFind?.dungeonMasterId;
 }
 
-export async function getCampaign(campaignId: string) {
-	return db.query.campaign.findFirst({
+export async function getCampaign(userId: string, campaignId: string) {
+	const foundCampaign = await db.query.campaign.findFirst({
 		where: eq(campaign.id, campaignId),
 		with: {
 			sessions: {
 				with: {
 					notes: true
 				}
+			},
+			campaignInvites: {
+				columns: {
+					invitedUserId: true
+				}
 			}
 		}
 	});
+
+	if (
+		foundCampaign?.dungeonMasterId !== userId &&
+		foundCampaign?.campaignInvites.find((invite) => invite.invitedUserId === userId) === undefined
+	) {
+		// TODO: make a proper error flow
+		return undefined;
+	}
+
+	return foundCampaign;
 }
 
 export async function getCampaignsForDM(userId: string) {
 	return await db.select().from(campaign).where(eq(campaign.dungeonMasterId, userId));
+}
+
+export async function getCampaignsForPlayer(userId: string) {
+	return await db
+		.select({ campaign })
+		.from(campaignInvite)
+		.innerJoin(campaign, eq(campaignInvite.campaignId, campaign.id))
+		.where(and(eq(campaignInvite.invitedUserId, userId), eq(campaignInvite.status, 'accepted')));
 }
 
 export const editCampaignSchema = z.object({

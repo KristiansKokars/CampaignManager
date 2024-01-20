@@ -32,30 +32,34 @@
 	}
 </script>
 
-<Dialog bind:dialog on:click={() => dialog.close()}>
-	<div class="p-4">
-		<p>Search for players</p>
-		<input type="text" name="player" bind:value={playerQuery} />
-		{#each foundPlayers as foundPlayer (foundPlayer.userId)}
-			<div class="flex gap-x-4">
-				<p>{foundPlayer.username}#{foundPlayer.userId}</p>
-				{#if sentInvitesToPlayers.get(foundPlayer.userId)}
-					<p>Invite sent</p>
-				{:else}
-					<button on:click={() => sendInvite(foundPlayer.userId)}>Send invite</button>
-				{/if}
-			</div>
-		{/each}
-	</div>
-</Dialog>
+{#if data.isDungeonMasterForCampaign}
+	<Dialog bind:dialog on:click={() => dialog.close()}>
+		<div class="p-4">
+			<p>Search for players</p>
+			<input type="text" name="player" bind:value={playerQuery} />
+			{#each foundPlayers as foundPlayer (foundPlayer.userId)}
+				<div class="flex gap-x-4">
+					<p>{foundPlayer.username}#{foundPlayer.userId}</p>
+					{#if sentInvitesToPlayers.get(foundPlayer.userId)}
+						<p>Invite sent</p>
+					{:else}
+						<button on:click={() => sendInvite(foundPlayer.userId)}>Send invite</button>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</Dialog>
+{/if}
 
 <GlassCard class="w-full max-w-96 flex-col items-center justify-center break-all">
 	{#if data.campaign}
 		<h2 class="text-xl font-bold">{data.campaign?.name}</h2>
 		<p>{data.campaign?.description}</p>
-		<div class="bg-red-500">
-			<button on:click={() => dialog.showModal()}>Invite players</button>
-		</div>
+		{#if data.isDungeonMasterForCampaign}
+			<div class="bg-red-500">
+				<button on:click={() => dialog.showModal()}>Invite players</button>
+			</div>
+		{/if}
 		<div class="flex gap-x-8">
 			{#each data.campaign?.sessions as campaignSession (`${data.campaign?.id}${campaignSession.sessionNumber}`)}
 				<div class="flex flex-col gap-y-4">
@@ -72,11 +76,13 @@
 				</div>
 			{/each}
 		</div>
-		<form method="POST" action="/campaign/delete?" use:enhance class="py-4">
-			<input type="hidden" name="campaignId" value={data.campaign.id} />
-			<Button class="w-full">Delete</Button>
-		</form>
-		<LinkButton href={`/campaign/${data.campaign.id}/edit`}>Edit</LinkButton>
+		{#if data.isDungeonMasterForCampaign}
+			<form method="POST" action="/campaign/delete?" use:enhance class="py-4">
+				<input type="hidden" name="campaignId" value={data.campaign.id} />
+				<Button class="w-full">Delete</Button>
+			</form>
+			<LinkButton href={`/campaign/${data.campaign.id}/edit`}>Edit</LinkButton>
+		{/if}
 		<form method="POST" action="?/addSession" use:enhance class="py-4">
 			<input type="hidden" name="campaignId" value={data.campaign.id} />
 			<Button class="w-full">Add Session</Button>

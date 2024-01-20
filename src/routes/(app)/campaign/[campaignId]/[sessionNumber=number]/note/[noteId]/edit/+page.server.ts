@@ -9,7 +9,7 @@ export async function load({ locals, params }) {
 	const session = await locals.auth.validate();
 	if (!session) throw redirect(302, '/login');
 
-	const note = await getNote(params.noteId);
+	const note = await getNote(session.user.userId, params.noteId);
 	if (note?.authorId !== session.user.userId) throw error(401);
 	if (!note) throw error(404);
 

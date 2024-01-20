@@ -1,6 +1,7 @@
 import { db } from '$src/lib/server/data/db.js';
 import { campaignInvite } from '$src/lib/server/data/schema.js';
 import { error } from '@sveltejs/kit';
+import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 const sendInviteSchema = z.object({
@@ -18,10 +19,13 @@ export async function POST({ request, locals }) {
 	const { userId, campaignId } = parsedRequest.data;
 
 	// TODO: check if user is DM and can invite to this campaign!
-	await db.insert(campaignInvite).values({
-		campaignId: campaignId,
-		invitedUserId: userId
-	});
+	await db
+		.insert(campaignInvite)
+		.values({
+			campaignId: campaignId,
+			invitedUserId: userId
+		})
+		.onDuplicateKeyUpdate({ set: { campaignId: sql`campaign_id` } }); // do nothing on conflict
 
 	return new Response(null, { status: 200 });
 }

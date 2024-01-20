@@ -8,7 +8,7 @@
 	export let data;
 </script>
 
-<div class="flex flex-col gap-10">
+<div class="flex min-h-lvh flex-col items-center justify-center gap-10">
 	{#await data.campaignInvites}
 		<div class="flex items-center justify-center"><LoadingSpinner /></div>
 	{:then campaignInvites}

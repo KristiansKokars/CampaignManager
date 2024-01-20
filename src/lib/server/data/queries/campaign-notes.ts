@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { db } from '../db';
-import { campaign, campaignNotes } from '../schema';
+import { campaign, campaignInvite, campaignNotes } from '../schema';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 
@@ -13,7 +13,31 @@ export const createNoteSchema = z.object({
 export type CreateNoteData = z.infer<typeof createNoteSchema>;
 
 export async function createNote(createNoteData: CreateNoteData, userId: string) {
-	// TODO: add user permissions check
+	const dungeonMasterId = (
+		await db
+			.select({ dungeonMasterId: campaign.dungeonMasterId })
+			.from(campaign)
+			.where(eq(campaign.id, createNoteData.campaignId))
+			.limit(1)
+	)[0]?.dungeonMasterId;
+	const invitedPlayers = await db
+		.select()
+		.from(campaignInvite)
+		.where(
+			and(
+				eq(campaignInvite.campaignId, createNoteData.campaignId),
+				eq(campaignInvite.status, 'accepted')
+			)
+		);
+
+	if (
+		userId !== dungeonMasterId &&
+		invitedPlayers.find((invite) => invite.invitedUserId !== userId)
+	) {
+		// TODO: proper error flow
+		return;
+	}
+
 	await db.insert(campaignNotes).values({
 		id: nanoid(),
 		title: createNoteData.title,
@@ -46,7 +70,18 @@ export async function deleteNoteFromDB(noteId: string, userId: string): Promise<
 	return true;
 }
 
-export async function getNote(noteId: string) {
+export async function getNote(userId: string, noteId: string) {
+	const campaignPlayers = await db.select({ dungeonMasterId: campaign.dungeonMasterId, userId: campaignInvite.invitedUserId })
+		.from(campaignNotes)
+		.innerJoin(campaignInvite, eq(campaignNotes.campaignId, campaignInvite.campaignId))
+		.innerJoin(campaign, eq(campaignNotes.campaignId, campaign.id))
+		.where(eq(campaignInvite.status, "accepted"));
+
+	if (campaignPlayers.at(0)?.dungeonMasterId !== userId && campaignPlayers.find(player => player.userId === userId) === undefined) {
+		// TODO: proper error flow
+		return undefined;
+	}
+	
 	return await db.query.campaignNotes.findFirst({
 		where: eq(campaignNotes.id, noteId)
 	});
