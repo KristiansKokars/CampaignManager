@@ -7,14 +7,15 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) return fail(401);
 
-		const parsedFormData = await parseFormData(request, createCampaignSchema, (errorData) => {
-			const allFieldErrors = errorData.error.errors.map((error) => ({
+		const parsedFormData = await parseFormData(request, createCampaignSchema);
+		if (!parsedFormData.success) {
+			const allFieldErrors = parsedFormData.error.errors.map((error) => ({
 				field: error.path[0],
 				message: error.message
 			}));
 			return fail(400, { error: true, allFieldErrors });
-		});
-		await createNewCampaign(parsedFormData, session.user.userId);
+		}
+		await createNewCampaign(parsedFormData.data, session.user.userId);
 
 		redirect(302, '/campaign');
 	}
