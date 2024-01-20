@@ -1,6 +1,6 @@
 import { db } from '$src/lib/server/data/db';
 import { campaignInvite } from '$src/lib/server/data/schema';
-import { and, eq, not } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 export async function load({ locals }) {
 	const session = await locals.auth.validate();
@@ -10,7 +10,7 @@ export async function load({ locals }) {
 		const uncheckedCampaignInvites = await db.query.campaignInvite.findFirst({
 			where: and(
 				eq(campaignInvite.invitedUserId, session.user.userId),
-				not(eq(campaignInvite.status, 'sent'))
+				eq(campaignInvite.status, 'sent')
 			)
 		});
 		hasUncheckedCampaignInvites = uncheckedCampaignInvites !== undefined;
