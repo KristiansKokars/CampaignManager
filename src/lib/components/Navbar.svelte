@@ -32,7 +32,6 @@
 			{/each}
 		</div>
 		<div class="flex gap-x-4 sm:gap-x-8">
-			<InviteButton {hasUncheckedCampaignInvites} />
 			{#if !isLoggedIn}
 				<!-- TODO: once Svelte snippets come around, make this into a reusable navlink in this component -->
 				<a
@@ -56,6 +55,7 @@
 					Register
 				</a>
 			{:else}
+				<InviteButton {hasUncheckedCampaignInvites} />
 				<form method="POST" class="flex gap-x-4" action="/signout?" use:enhance>
 					<button class="hover:text-opacity-8 text-red-400 text-opacity-90 hover:text-red-300">
 						Sign out
