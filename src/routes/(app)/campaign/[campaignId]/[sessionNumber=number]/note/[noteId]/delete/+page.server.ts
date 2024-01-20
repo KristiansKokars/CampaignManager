@@ -1,4 +1,5 @@
 import { deleteNoteFromDB } from '$src/lib/server/data/queries/campaign-notes';
+import { parseFormData } from '$src/lib/util/parse-form-data';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
 
@@ -13,13 +14,7 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 
-		const formData = Object.fromEntries(await request.formData());
-		const parsedFormData = deleteNoteSchema.safeParse(formData);
-
-		if (!parsedFormData.success) {
-			throw error(400);
-		}
-		const { campaignId, sessionNumber, noteId } = parsedFormData.data;
+		const { campaignId, sessionNumber, noteId } = await parseFormData(request, deleteNoteSchema);
 		const wasAllowedToDeleteNote = await deleteNoteFromDB(noteId, session.user.userId);
 
 		if (!wasAllowedToDeleteNote) {

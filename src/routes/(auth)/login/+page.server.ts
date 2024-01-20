@@ -3,6 +3,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { z } from 'zod';
 import { LuciaError } from 'lucia';
+import { parseFormData } from '$src/lib/util/parse-form-data';
 
 const loginUserSchema = z.object({
 	email: z.string().email(),
@@ -11,18 +12,14 @@ const loginUserSchema = z.object({
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
-		const formData = Object.fromEntries(await request.formData());
-		const parsedFormData = loginUserSchema.safeParse(formData);
-
-		if (!parsedFormData.success) {
-			const allFieldErrors = parsedFormData.error.errors.map((error) => ({
+		const { email, password } = await parseFormData(request, loginUserSchema, (errorData) => {
+			const allFieldErrors = errorData.error.errors.map((error) => ({
 				field: error.path[0],
 				message: error.message
 			}));
 			return fail(400, { error: true, allFieldErrors });
-		}
+		});
 
-		const { email, password } = parsedFormData.data;
 		try {
 			const userKey = await auth.useKey('email', email.toLowerCase(), password);
 			const session = await auth.createSession({

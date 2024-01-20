@@ -1,5 +1,6 @@
 import { db } from '$src/lib/server/data/db.js';
 import { campaignInvite } from '$src/lib/server/data/schema.js';
+import { parseFormData } from '$src/lib/util/parse-form-data.js';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
@@ -44,13 +45,7 @@ async function replyToInvite(locals: App.Locals, request: Request, reply: 'accep
 	const session = await locals.auth.validate();
 	if (!session) throw error(401);
 
-	const formData = Object.fromEntries(await request.formData());
-	const parsedFormData = inviteSchema.safeParse(formData);
-
-	if (!parsedFormData.success) {
-		throw error(400);
-	}
-	const { campaignId } = parsedFormData.data;
+	const { campaignId } = await parseFormData(request, inviteSchema);
 
 	await db
 		.update(campaignInvite)

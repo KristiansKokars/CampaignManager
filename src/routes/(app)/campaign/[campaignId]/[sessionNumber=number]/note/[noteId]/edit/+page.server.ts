@@ -3,6 +3,7 @@ import {
 	editNoteSchema,
 	getNote
 } from '$src/lib/server/data/queries/campaign-notes.js';
+import { parseFormData } from '$src/lib/util/parse-form-data.js';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 
 export async function load({ locals, params }) {
@@ -26,19 +27,16 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) return fail(401);
 
-		const formData = Object.fromEntries(await request.formData());
-		const parsedFormData = editNoteSchema.safeParse(formData);
-
-		if (!parsedFormData.success) {
-			const allFieldErrors = parsedFormData.error.errors.map((error) => ({
+		const parsedFormData = await parseFormData(request, editNoteSchema, (errorData) => {
+			const allFieldErrors = errorData.error.errors.map((error) => ({
 				field: error.path[0],
 				message: error.message
 			}));
 			return fail(400, { error: true, allFieldErrors });
-		}
-		const { noteId, campaignId, sessionNumber } = parsedFormData.data;
+		});
+		const { noteId, campaignId, sessionNumber } = parsedFormData;
 
-		const wasAllowedToEdit = await editExistingNote(parsedFormData.data, session.user.userId);
+		const wasAllowedToEdit = await editExistingNote(parsedFormData, session.user.userId);
 		if (!wasAllowedToEdit) {
 			throw error(403);
 		}

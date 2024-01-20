@@ -1,6 +1,7 @@
 import { getCampaign } from '$src/lib/server/data/queries/campaign';
 import { redirect, error, type Actions, fail } from '@sveltejs/kit';
 import { createNote, createNoteSchema } from '$src/lib/server/data/queries/campaign-notes.js';
+import { parseFormData } from '$src/lib/util/parse-form-data.js';
 
 export async function load({ locals, params }) {
 	const session = await locals.auth.validate();
@@ -21,19 +22,16 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) return fail(401);
 
-		const formData = Object.fromEntries(await request.formData());
-		const parsedFormData = createNoteSchema.safeParse(formData);
-
-		if (!parsedFormData.success) {
-			const allFieldErrors = parsedFormData.error.errors.map((error) => ({
+		const parsedFormData = await parseFormData(request, createNoteSchema, (errorData) => {
+			const allFieldErrors = errorData.error.errors.map((error) => ({
 				field: error.path[0],
 				message: error.message
 			}));
 			return fail(400, { error: true, allFieldErrors });
-		}
-		const { campaignId } = parsedFormData.data;
+		});
+		const { campaignId } = parsedFormData;
 
-		await createNote(parsedFormData.data, session.user.userId);
+		await createNote(parsedFormData, session.user.userId);
 
 		redirect(302, `/campaign/${campaignId}`);
 	}

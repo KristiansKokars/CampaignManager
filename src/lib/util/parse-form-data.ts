@@ -1,15 +1,18 @@
 import { error } from '@sveltejs/kit';
-import type { ZodType, ZodTypeDef } from 'zod';
+import type { SafeParseError, ZodType, ZodTypeDef } from 'zod';
 
 export async function parseFormData<Output, Input>(
 	request: Request,
-	schema: ZodType<Output, ZodTypeDef, Input>
+	schema: ZodType<Output, ZodTypeDef, Input>,
+	onFailure: (errorData: SafeParseError<Input>) => void = () => {
+		throw error(400);
+	}
 ) {
 	const formData = Object.fromEntries(await request.formData());
 	const parsedFormData = schema.safeParse(formData);
 
 	if (!parsedFormData.success) {
-		throw error(400);
+		throw onFailure(parsedFormData);
 	}
 
 	return parsedFormData.data;

@@ -3,6 +3,7 @@ import {
 	editExistingCampaign,
 	getCampaign
 } from '$src/lib/server/data/queries/campaign';
+import { parseFormData } from '$src/lib/util/parse-form-data.js';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 
 export async function load({ locals, params }) {
@@ -23,22 +24,19 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) return fail(401);
 
-		const formData = Object.fromEntries(await request.formData());
-		const parsedFormData = editCampaignSchema.safeParse(formData);
-
-		if (!parsedFormData.success) {
-			const allFieldErrors = parsedFormData.error.errors.map((error) => ({
+		const parsedFormData = await parseFormData(request, editCampaignSchema, (errorData) => {
+			const allFieldErrors = errorData.error.errors.map((error) => ({
 				field: error.path[0],
 				message: error.message
 			}));
 			return fail(400, { error: true, allFieldErrors });
-		}
+		});
 
-		const wasAllowedToEdit = await editExistingCampaign(parsedFormData.data, session.user.userId);
+		const wasAllowedToEdit = await editExistingCampaign(parsedFormData, session.user.userId);
 		if (!wasAllowedToEdit) {
 			throw error(403);
 		}
 
-		redirect(302, `/campaign/${parsedFormData.data.campaignId}`);
+		redirect(302, `/campaign/${parsedFormData.campaignId}`);
 	}
 };

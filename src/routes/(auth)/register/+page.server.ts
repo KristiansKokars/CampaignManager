@@ -2,6 +2,7 @@ import { auth } from '$lib/server/features/auth/lucia';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { z } from 'zod';
+import { parseFormData } from '$src/lib/util/parse-form-data';
 
 const registerUserSchema = z.object({
 	email: z.string().email(),
@@ -11,18 +12,18 @@ const registerUserSchema = z.object({
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
-		const formData = Object.fromEntries(await request.formData());
-		const parsedFormData = registerUserSchema.safeParse(formData);
+		const { email, username, password } = await parseFormData(
+			request,
+			registerUserSchema,
+			(errorData) => {
+				const allFieldErrors = errorData.error.errors.map((error) => ({
+					field: error.path[0],
+					message: error.message
+				}));
+				return fail(400, { error: true, allFieldErrors });
+			}
+		);
 
-		if (!parsedFormData.success) {
-			const allFieldErrors = parsedFormData.error.errors.map((error) => ({
-				field: error.path[0],
-				message: error.message
-			}));
-			return fail(400, { error: true, allFieldErrors });
-		}
-
-		const { email, username, password } = parsedFormData.data;
 		try {
 			const user = await auth.createUser({
 				key: {
