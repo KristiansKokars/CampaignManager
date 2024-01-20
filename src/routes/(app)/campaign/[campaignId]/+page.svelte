@@ -32,19 +32,21 @@
 	}
 </script>
 
-<Dialog bind:dialog class="p-4" on:click={() => dialog.close()}>
-	<p>Search for players</p>
-	<input type="text" name="player" bind:value={playerQuery} />
-	{#each foundPlayers as foundPlayer (foundPlayer.userId)}
-		<div class="flex gap-x-4">
-			<p>{foundPlayer.username}#{foundPlayer.userId}</p>
-			{#if sentInvitesToPlayers.get(foundPlayer.userId)}
-				<p>Invite sent</p>
-			{:else}
-				<button on:click={() => sendInvite(foundPlayer.userId)}>Send invite</button>
-			{/if}
-		</div>
-	{/each}
+<Dialog bind:dialog on:click={() => dialog.close()}>
+	<div class="p-4">
+		<p>Search for players</p>
+		<input type="text" name="player" bind:value={playerQuery} />
+		{#each foundPlayers as foundPlayer (foundPlayer.userId)}
+			<div class="flex gap-x-4">
+				<p>{foundPlayer.username}#{foundPlayer.userId}</p>
+				{#if sentInvitesToPlayers.get(foundPlayer.userId)}
+					<p>Invite sent</p>
+				{:else}
+					<button on:click={() => sendInvite(foundPlayer.userId)}>Send invite</button>
+				{/if}
+			</div>
+		{/each}
+	</div>
 </Dialog>
 
 <GlassCard class="w-full max-w-96 flex-col items-center justify-center break-all">
