@@ -1,16 +1,12 @@
-import { db } from '$src/lib/server/data/db';
-import { user } from '$src/lib/server/data/schema';
+import { findUsersByUsernameExcludingYourself } from '$src/lib/server/data/queries/user.js';
 import { json } from '@sveltejs/kit';
-import { like } from 'drizzle-orm';
 
-export async function GET({ url }) {
+export async function GET({ url, locals }) {
 	const username = url.searchParams.get('username');
 	if (!username) return json([]);
+	const session = await locals.auth.validate();
 
-	const users = await db
-		.select({ userId: user.id, username: user.username })
-		.from(user)
-		.where(like(user.username, `%${username}%`));
+	const users = await findUsersByUsernameExcludingYourself(session?.user.userId ?? '', username);
 
 	return json(users);
 }
