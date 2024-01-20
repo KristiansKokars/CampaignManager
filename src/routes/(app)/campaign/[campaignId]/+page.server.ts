@@ -1,4 +1,3 @@
-import { getDungeonMasterIdForCampaign } from '$src/lib/server/data/queries/campaign';
 import { createNewCampaignSession } from '$src/lib/server/data/queries/campaign-session.js';
 import { getCampaign } from '$src/lib/server/data/queries/campaign';
 import { error, redirect, type Actions } from '@sveltejs/kit';
@@ -31,10 +30,8 @@ export const actions: Actions = {
 		if (!session) throw error(401);
 
 		const { campaignId } = await parseFormData(request, campaignIdSchema);
-		const dungeonMasterId = await getDungeonMasterIdForCampaign(campaignId);
-		if (dungeonMasterId !== session.user.userId) throw error(401);
 
-		await createNewCampaignSession(campaignId);
+		await createNewCampaignSession(session.user.userId, campaignId);
 	},
 	delete: async ({ locals, request }) => {
 		const session = await locals.auth.validate();

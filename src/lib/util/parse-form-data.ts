@@ -12,6 +12,7 @@ export async function parseFormData<Output, Input>(
 	const parsedFormData = schema.safeParse(formData);
 
 	if (!parsedFormData.success) {
+		// TODO: fix bug here
 		throw onFailure(parsedFormData);
 	}
 

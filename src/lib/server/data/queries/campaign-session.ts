@@ -12,9 +12,10 @@ export async function getLastSessionNumberForCampaign(campaignId: string) {
 	return lastSessionNumber;
 }
 
-export async function createNewCampaignSession(campaignId: string) {
+		// TODO: add check for players here
+export async function createNewCampaignSession(userId: string, campaignId: string) {
 	await db.insert(campaignSession).values({
 		campaignId: campaignId,
-		sessionNumber: (await getLastSessionNumberForCampaign(campaignId)) + 1
+		sessionNumber: (await getLastSessionNumberForCampaign(campaignId)) + 1,
 	});
 }

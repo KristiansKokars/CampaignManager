@@ -5,6 +5,7 @@
 	import Dialog from '$src/lib/components/Dialog.svelte';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 	import LinkButton from '$src/lib/components/LinkButton.svelte';
+	import dayjs from 'dayjs';
 
 	export let data;
 
@@ -63,7 +64,10 @@
 		<div class="flex gap-x-8">
 			{#each data.campaign?.sessions as campaignSession (`${data.campaign?.id}${campaignSession.sessionNumber}`)}
 				<div class="flex flex-col gap-y-4">
-					<p>Session: {campaignSession.sessionNumber}</p>
+					<p>
+						Session: {campaignSession.sessionNumber}
+						{dayjs(campaignSession.date).format('DD/MM/YYYY')}
+					</p>
 					{#each campaignSession.notes as note (note.id)}
 						<LinkButton
 							href={`/campaign/${data.id}/${campaignSession.sessionNumber}/note/${note.id}`}

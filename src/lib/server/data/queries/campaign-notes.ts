@@ -71,17 +71,25 @@ export async function deleteNoteFromDB(noteId: string, userId: string): Promise<
 }
 
 export async function getNote(userId: string, noteId: string) {
-	const campaignPlayers = await db.select({ dungeonMasterId: campaign.dungeonMasterId, userId: campaignInvite.invitedUserId })
+	const campaignPlayers = await db
+		.select({
+			dungeonMasterId: campaign.dungeonMasterId,
+			userId: campaignInvite.invitedUserId,
+			status: campaignInvite.status
+		})
 		.from(campaignNotes)
-		.innerJoin(campaignInvite, eq(campaignNotes.campaignId, campaignInvite.campaignId))
-		.innerJoin(campaign, eq(campaignNotes.campaignId, campaign.id))
-		.where(eq(campaignInvite.status, "accepted"));
+		.leftJoin(campaignInvite, eq(campaignNotes.campaignId, campaignInvite.campaignId))
+		.leftJoin(campaign, eq(campaignNotes.campaignId, campaign.id));
 
-	if (campaignPlayers.at(0)?.dungeonMasterId !== userId && campaignPlayers.find(player => player.userId === userId) === undefined) {
+	if (
+		campaignPlayers.at(0)?.dungeonMasterId !== userId &&
+		campaignPlayers.find((player) => player.userId === userId && player.status === 'accepted') ===
+			undefined
+	) {
 		// TODO: proper error flow
 		return undefined;
 	}
-	
+
 	return await db.query.campaignNotes.findFirst({
 		where: eq(campaignNotes.id, noteId)
 	});
