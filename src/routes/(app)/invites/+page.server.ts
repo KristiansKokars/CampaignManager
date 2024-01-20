@@ -1,17 +1,66 @@
 import { db } from '$src/lib/server/data/db.js';
 import { campaignInvite } from '$src/lib/server/data/schema.js';
-import { redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { error, redirect, type Actions } from '@sveltejs/kit';
+import { and, eq } from 'drizzle-orm';
+import { z } from 'zod';
 
 export async function load({ locals }) {
 	const session = await locals.auth.validate();
 	if (!session) redirect(302, '/login');
 
 	const campaignInvites = db.query.campaignInvite.findMany({
-        where: eq(campaignInvite.invitedUserId, session.user.userId)
-    });
+		where: and(
+			eq(campaignInvite.invitedUserId, session.user.userId),
+			eq(campaignInvite.status, 'sent')
+		),
+		with: {
+			campaign: {
+				columns: {
+					name: true
+				}
+			}
+		}
+	});
 
 	return {
 		campaignInvites: campaignInvites
 	};
+}
+
+const inviteSchema = z.object({
+	campaignId: z.string()
+});
+
+export const actions: Actions = {
+	acceptInvite: async ({ request, locals }) => {
+		await replyToInvite(locals, request, 'accepted');
+	},
+	denyInvite: async ({ request, locals }) => {
+		await replyToInvite(locals, request, 'declined');
+	}
+};
+
+async function replyToInvite(locals: App.Locals, request: Request, reply: 'accepted' | 'declined') {
+	const session = await locals.auth.validate();
+	if (!session) throw error(401);
+
+	const formData = Object.fromEntries(await request.formData());
+	const parsedFormData = inviteSchema.safeParse(formData);
+
+	if (!parsedFormData.success) {
+		throw error(400);
+	}
+	const { campaignId } = parsedFormData.data;
+
+	await db
+		.update(campaignInvite)
+		.set({
+			status: reply
+		})
+		.where(
+			and(
+				eq(campaignInvite.campaignId, campaignId),
+				eq(campaignInvite.invitedUserId, session.user.userId)
+			)
+		);
 }

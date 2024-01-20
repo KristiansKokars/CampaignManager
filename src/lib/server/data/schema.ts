@@ -73,7 +73,8 @@ export const campaign = mysqlTable('campaign', {
 });
 
 export const campaignRelations = relations(campaign, ({ many }) => ({
-	sessions: many(campaignSession)
+	sessions: many(campaignSession),
+	campaignInvites: many(campaignInvite)
 }));
 
 export const campaignSession = mysqlTable(
@@ -135,3 +136,10 @@ export const campaignInvite = mysqlTable(
 		};
 	}
 );
+
+export const campaignInviteRelations = relations(campaignInvite, ({ one }) => ({
+	campaign: one(campaign, {
+		fields: [campaignInvite.campaignId],
+		references: [campaign.id]
+	})
+}));
