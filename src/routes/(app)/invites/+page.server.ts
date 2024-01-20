@@ -45,7 +45,9 @@ async function replyToInvite(locals: App.Locals, request: Request, reply: 'accep
 	const session = await locals.auth.validate();
 	if (!session) throw error(401);
 
-	const { campaignId } = await parseFormData(request, inviteSchema);
+	const parsedFormData = await parseFormData(request, inviteSchema);
+	if (!parsedFormData.success) throw error(400);
+	const { campaignId } = parsedFormData.data;
 
 	await db
 		.update(campaignInvite)

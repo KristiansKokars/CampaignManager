@@ -27,16 +27,17 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) return fail(401);
 
-		const parsedFormData = await parseFormData(request, editNoteSchema, (errorData) => {
-			const allFieldErrors = errorData.error.errors.map((error) => ({
+		const parsedFormData = await parseFormData(request, editNoteSchema);
+		if (!parsedFormData.success) {
+			const allFieldErrors = parsedFormData.error.errors.map((error) => ({
 				field: error.path[0],
 				message: error.message
 			}));
 			return fail(400, { error: true, allFieldErrors });
-		});
-		const { noteId, campaignId, sessionNumber } = parsedFormData;
+		}
+		const { noteId, campaignId, sessionNumber } = parsedFormData.data;
 
-		const wasAllowedToEdit = await editExistingNote(parsedFormData, session.user.userId);
+		const wasAllowedToEdit = await editExistingNote(parsedFormData.data, session.user.userId);
 		if (!wasAllowedToEdit) {
 			throw error(403);
 		}

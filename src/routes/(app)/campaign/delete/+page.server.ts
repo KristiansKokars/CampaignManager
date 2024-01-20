@@ -1,5 +1,5 @@
 import { deleteCampaignFromDB } from '$src/lib/server/data/queries/campaign';
-import { parseFormData } from '$src/lib/util/parse-form-data';
+import { parseFormDataOrThrow400 } from '$src/lib/util/parse-form-data';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
 
@@ -12,7 +12,8 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 
-		const { campaignId } = await parseFormData(request, deleteCampaignSchema);
+		const { campaignId } = await parseFormDataOrThrow400(request, deleteCampaignSchema);
+
 		const wasAllowedToDeleteCampaign = await deleteCampaignFromDB(campaignId, session.user.userId);
 
 		if (!wasAllowedToDeleteCampaign) {

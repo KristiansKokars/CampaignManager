@@ -3,7 +3,7 @@ import { getCampaign } from '$src/lib/server/data/queries/campaign';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
 import { deleteCampaignFromDB } from '$src/lib/server/data/queries/campaign';
-import { parseFormData } from '$src/lib/util/parse-form-data.js';
+import { parseFormDataOrThrow400 } from '$src/lib/util/parse-form-data.js';
 import { leaveCampaign } from '$src/lib/server/data/queries/campaign-invites.js';
 
 export async function load({ locals, params }) {
@@ -29,7 +29,7 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 
-		const { campaignId } = await parseFormData(request, campaignIdSchema);
+		const { campaignId } = await parseFormDataOrThrow400(request, campaignIdSchema);
 
 		await createNewCampaignSession(session.user.userId, campaignId);
 	},
@@ -37,7 +37,8 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 
-		const { campaignId } = await parseFormData(request, campaignIdSchema);
+		const { campaignId } = await parseFormDataOrThrow400(request, campaignIdSchema);
+
 		const wasAllowedToDeleteCampaign = await deleteCampaignFromDB(campaignId, session.user.userId);
 
 		if (!wasAllowedToDeleteCampaign) {
@@ -50,7 +51,8 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 
-		const { campaignId } = await parseFormData(request, campaignIdSchema);
+		const { campaignId } = await parseFormDataOrThrow400(request, campaignIdSchema);
+
 		await leaveCampaign(session.user.userId, campaignId);
 
 		throw redirect(302, '/campaign');

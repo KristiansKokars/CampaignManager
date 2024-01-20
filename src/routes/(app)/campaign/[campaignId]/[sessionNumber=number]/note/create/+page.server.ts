@@ -22,16 +22,17 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) return fail(401);
 
-		const parsedFormData = await parseFormData(request, createNoteSchema, (errorData) => {
-			const allFieldErrors = errorData.error.errors.map((error) => ({
+		const parsedFormData = await parseFormData(request, createNoteSchema);
+		if (!parsedFormData.success) {
+			const allFieldErrors = parsedFormData.error.errors.map((error) => ({
 				field: error.path[0],
 				message: error.message
 			}));
 			return fail(400, { error: true, allFieldErrors });
-		});
-		const { campaignId } = parsedFormData;
+		}
+		const { campaignId } = parsedFormData.data;
 
-		await createNote(parsedFormData, session.user.userId);
+		await createNote(parsedFormData.data, session.user.userId);
 
 		redirect(302, `/campaign/${campaignId}`);
 	}
