@@ -115,3 +115,23 @@ export const campaignNotesRelations = relations(campaignNotes, ({ one }) => ({
 		references: [campaignSession.sessionNumber, campaignSession.campaignId]
 	})
 }));
+
+export const campaignInvite = mysqlTable(
+	'campaign_invite',
+	{
+		campaignId: varchar('campaign_id', { length: 256 })
+			.notNull()
+			.references(() => campaign.id),
+		invitedUserId: varchar('invited_user_id', {
+			length: 15
+		})
+			.notNull()
+			.references(() => user.id),
+		status: mysqlEnum('status', ['declined', 'accepted', 'sent']).default('sent')
+	},
+	(table) => {
+		return {
+			pk: primaryKey({ columns: [table.campaignId, table.invitedUserId] })
+		};
+	}
+);
