@@ -10,7 +10,7 @@ export async function load({ locals, params }) {
 	const session = await locals.auth.validate();
 	if (!session) throw redirect(302, '/login');
 
-	const campaign = await getCampaign(params.campaignId);
+	const campaign = await getCampaign(session.user.userId, params.campaignId);
 	if (campaign?.dungeonMasterId !== session.user.userId) throw error(401);
 	if (!campaign) throw error(404);
 
