@@ -16,6 +16,9 @@
 		<InputField type="password" name="password" id="password">Password</InputField>
 		<Button>Register</Button>
 	</form>
+	{#if form?.message}
+		<p class="font-bold text-red-400">{form?.message}</p>
+	{/if}
 	{#if form?.error}
 		{#each form?.allFieldErrors as fieldError}
 			<p class="text-red-400">{fieldError.field}: {fieldError.message}</p>
