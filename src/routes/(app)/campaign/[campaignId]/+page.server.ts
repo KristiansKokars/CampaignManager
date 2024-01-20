@@ -40,7 +40,6 @@ export const actions: Actions = {
 		const { campaignId } = await parseFormDataOrThrow400(request, campaignIdSchema);
 
 		const wasAllowedToDeleteCampaign = await deleteCampaignFromDB(campaignId, session.user.userId);
-
 		if (!wasAllowedToDeleteCampaign) {
 			throw error(403);
 		}
