@@ -77,11 +77,16 @@
 			{/each}
 		</div>
 		{#if data.isDungeonMasterForCampaign}
-			<form method="POST" action="/campaign/delete?" use:enhance class="py-4">
+			<form method="POST" action="?/delete" use:enhance class="py-4">
 				<input type="hidden" name="campaignId" value={data.campaign.id} />
 				<Button class="w-full">Delete</Button>
 			</form>
 			<LinkButton href={`/campaign/${data.campaign.id}/edit`}>Edit</LinkButton>
+		{:else}
+			<form method="POST" action="?/leave" use:enhance class="py-4">
+				<input type="hidden" name="campaignId" value={data.campaign.id} />
+				<Button class="w-full">Leave</Button>
+			</form>
 		{/if}
 		<form method="POST" action="?/addSession" use:enhance class="py-4">
 			<input type="hidden" name="campaignId" value={data.campaign.id} />

@@ -3,6 +3,9 @@ import { createNewCampaignSession } from '$src/lib/server/data/queries/campaign-
 import { getCampaign } from '$src/lib/server/data/queries/campaign';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
+import { deleteCampaignFromDB } from '$src/lib/server/data/queries/campaign';
+import { parseFormData } from '$src/lib/util/parse-form-data.js';
+import { leaveCampaign } from '$src/lib/server/data/queries/campaign-invites.js';
 
 export async function load({ locals, params }) {
 	const session = await locals.auth.validate();
@@ -18,7 +21,7 @@ export async function load({ locals, params }) {
 	};
 }
 
-const addSessionSchema = z.object({
+const campaignIdSchema = z.object({
 	campaignId: z.string()
 });
 
@@ -27,17 +30,32 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 
-		const formData = Object.fromEntries(await request.formData());
-		const parsedFormData = addSessionSchema.safeParse(formData);
-
-		if (!parsedFormData.success) {
-			throw error(400);
-		}
-
-		const { campaignId } = parsedFormData.data;
+		const { campaignId } = await parseFormData(request, campaignIdSchema);
 		const dungeonMasterId = await getDungeonMasterIdForCampaign(campaignId);
 		if (dungeonMasterId !== session.user.userId) throw error(401);
 
 		await createNewCampaignSession(campaignId);
+	},
+	delete: async ({ locals, request }) => {
+		const session = await locals.auth.validate();
+		if (!session) throw error(401);
+
+		const { campaignId } = await parseFormData(request, campaignIdSchema);
+		const wasAllowedToDeleteCampaign = await deleteCampaignFromDB(campaignId, session.user.userId);
+
+		if (!wasAllowedToDeleteCampaign) {
+			throw error(403);
+		}
+
+		throw redirect(302, '/campaign');
+	},
+	leave: async ({ locals, request }) => {
+		const session = await locals.auth.validate();
+		if (!session) throw error(401);
+
+		const { campaignId } = await parseFormData(request, campaignIdSchema);
+		await leaveCampaign(session.user.userId, campaignId);
+
+		throw redirect(302, '/campaign');
 	}
 };
