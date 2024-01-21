@@ -5,7 +5,6 @@ import { z } from 'zod';
 
 const deleteNoteSchema = z.object({
 	campaignId: z.string(),
-	sessionNumber: z.string(),
 	noteId: z.string()
 });
 
@@ -14,16 +13,14 @@ export const actions: Actions = {
 		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 
-		const { campaignId, sessionNumber, noteId } = await parseFormDataOrThrow400(
-			request,
-			deleteNoteSchema
-		);
+		const { campaignId, noteId } = await parseFormDataOrThrow400(request, deleteNoteSchema);
 		const wasAllowedToDeleteNote = await deleteNoteFromDB(noteId, session.user.userId);
 
+		console.log(wasAllowedToDeleteNote);
 		if (!wasAllowedToDeleteNote) {
 			throw error(403);
 		}
 
-		throw redirect(302, `/campaign/${campaignId}/${sessionNumber}`);
+		throw redirect(302, `/campaign/${campaignId}`);
 	}
 };

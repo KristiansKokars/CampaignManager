@@ -54,7 +54,7 @@ export async function getAuthorIdForNote(noteId: string) {
 			.select({ authorId: campaignNotes.authorId })
 			.from(campaignNotes)
 			.where(eq(campaignNotes.id, noteId))
-			.limit(0)
+			.limit(1)
 	)[0];
 	return campaignToFind?.authorId;
 }
@@ -65,7 +65,7 @@ export async function deleteNoteFromDB(noteId: string, userId: string): Promise<
 
 	await db
 		.delete(campaignNotes)
-		.where(and(eq(campaignNotes.id, noteId), eq(campaign.dungeonMasterId, userId)));
+		.where(and(eq(campaignNotes.id, noteId), eq(campaignNotes.authorId, userId)));
 
 	return true;
 }
