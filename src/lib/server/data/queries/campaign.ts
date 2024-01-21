@@ -51,7 +51,15 @@ export async function getCampaign(userId: string, campaignId: string) {
 		with: {
 			sessions: {
 				with: {
-					notes: true
+					notes: {
+						with: {
+							author: {
+								columns: {
+									username: true
+								}
+							}
+						}
+					}
 				},
 				orderBy: [desc(campaignSession.sessionNumber)]
 			},

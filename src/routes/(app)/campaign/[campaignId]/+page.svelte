@@ -18,6 +18,7 @@
 	import LeaveIcon from '$src/lib/icons/LeaveIcon.svelte';
 	import AddUserIcon from '$src/lib/icons/AddUserIcon.svelte';
 	import AddNoteIcon from '$src/lib/icons/AddNoteIcon.svelte';
+	import Divider from '$src/lib/components/Divider.svelte';
 
 	export let data;
 
@@ -103,53 +104,68 @@
 						{/if}
 					</div>
 				</div>
-				<p
-					class={cn(
-						'max-h-24 w-fit overflow-y-auto rounded-md  pr-4 ',
-						data.campaign.bannerUrl && 'bg-slate-900/20 backdrop-blur'
-					)}
-				>
-					{data.campaign?.description}
-				</p>
+				<div class="flex h-full justify-between">
+					<p
+						class={cn(
+							'h-fit max-h-24 w-fit overflow-y-auto rounded-md pr-4',
+							data.campaign.bannerUrl && 'bg-slate-900/20 backdrop-blur'
+						)}
+					>
+						{data.campaign?.description}
+					</p>
+					<form method="POST" action="?/addSession" use:enhance class="flex items-end">
+						<input type="hidden" name="campaignId" value={data.campaign.id} />
+						<Button class="">Add Session</Button>
+					</form>
+				</div>
 			</div>
 		</Overlap>
 		<div class="w-full p-4">
-			<div class="flex flex-wrap justify-evenly gap-4">
-				{#each data.campaign?.sessions as campaignSession (`${data.campaign?.id}${campaignSession.sessionNumber}`)}
-					<div
-						class="flex w-full flex-col rounded-lg bg-red-900/10 bg-opacity-20 p-4 backdrop-blur sm:w-48"
-					>
-						<div class="flex items-center">
-							<div class="pr-4">
-								<h2 class="text-lg font-bold sm:text-xl">
-									Session {campaignSession.sessionNumber}
-								</h2>
-								<p class="font-light">{dayjs(campaignSession.date).format('DD/MM/YYYY')}</p>
+			{#if data.campaign?.sessions.length !== 0}
+				<div
+					class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+				>
+					{#each data.campaign?.sessions as campaignSession (`${data.campaign?.id}${campaignSession.sessionNumber}`)}
+						<div
+							class="scrollbar-thumb-slate-800 scrollbar-track-slate-900 scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg scrollbar-thin flex max-h-48 flex-col overflow-y-auto rounded-lg bg-red-900/10 bg-opacity-20 backdrop-blur"
+						>
+							<div
+								class="sticky top-0 flex items-center border-b border-gray-600/20 border-opacity-40 bg-gray-800/70 bg-opacity-70 bg-clip-padding p-4 backdrop-blur backdrop-filter"
+							>
+								<div class="pr-4">
+									<h2 class="text-lg font-bold sm:text-xl">
+										Session {campaignSession.sessionNumber}
+									</h2>
+									<p class="font-light">{dayjs(campaignSession.date).format('DD/MM/YYYY')}</p>
+								</div>
+								<div class="flex grow justify-end">
+									<TextLinkButton
+										title="Add note to session"
+										href={`/campaign/${data.id}/${campaignSession.sessionNumber}/note/create`}
+										><AddNoteIcon class="size-6" /></TextLinkButton
+									>
+								</div>
 							</div>
-							<div class="flex grow justify-end">
-								<TextLinkButton
-									title="Add note to session"
-									href={`/campaign/${data.id}/${campaignSession.sessionNumber}/note/create`}
-									><AddNoteIcon class="size-6" /></TextLinkButton
-								>
+							<div class="flex h-full flex-col gap-y-2 p-4 py-2">
+								{#each campaignSession.notes as note (note.id)}
+									<a
+										class="w-full rounded-md bg-slate-900/70 p-2 hover:bg-slate-900/85"
+										href={`/campaign/${data.id}/${campaignSession.sessionNumber}/note/${note.id}`}
+									>
+										<p>{note.title}</p>
+										<Divider />
+										<p class="text-end text-sm font-light">{note.author.username}</p></a
+									>
+								{:else}
+									<p class="h-full inline-flex justify-center items-center">No notes yet!</p>
+								{/each}
 							</div>
 						</div>
-						<div class="flex gap-y-2 py-2">
-							{#each campaignSession.notes as note (note.id)}
-								<LinkButton
-									href={`/campaign/${data.id}/${campaignSession.sessionNumber}/note/${note.id}`}
-									>Note: {note.title}</LinkButton
-								>
-							{/each}
-						</div>
-					</div>
-				{/each}
-			</div>
-
-			<form method="POST" action="?/addSession" use:enhance class="flex w-full justify-center py-4">
-				<input type="hidden" name="campaignId" value={data.campaign.id} />
-				<Button class="">Add Session</Button>
-			</form>
+					{/each}
+				</div>
+			{:else}
+				<h2 class="inline-flex h-48 w-full items-center justify-center">No sessions yet!</h2>
+			{/if}
 		</div>
 	</div>
 </TopLayout>

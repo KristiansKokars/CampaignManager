@@ -24,6 +24,10 @@ export const user = mysqlTable('auth_user', {
 	emailVerified: boolean('email_verified')
 });
 
+export const userRelations = relations(user, ({ many }) => ({
+	notes: many(campaignNotes)
+}));
+
 export const userKey = mysqlTable('user_key', {
 	id: varchar('id', {
 		length: 255
@@ -114,6 +118,10 @@ export const campaignNotesRelations = relations(campaignNotes, ({ one }) => ({
 	campaignSession: one(campaignSession, {
 		fields: [campaignNotes.sessionNumber, campaignNotes.campaignId],
 		references: [campaignSession.sessionNumber, campaignSession.campaignId]
+	}),
+	author: one(user, {
+		fields: [campaignNotes.authorId],
+		references: [user.id]
 	})
 }));
 
