@@ -7,7 +7,7 @@
 </script>
 
 <GlassCard
-	class={cn('w-full max-w-screen-lg flex-col items-center justify-center break-all', className)}
+	class={cn('w-full max-w-screen-lg flex-col items-center justify-center break-words', className)}
 >
 	<slot />
 </GlassCard>
