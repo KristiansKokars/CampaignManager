@@ -1,4 +1,7 @@
-import { createNewCampaignSession } from '$src/lib/server/data/queries/campaign-session.js';
+import {
+	createNewCampaignSession,
+	deleteCampaignSession
+} from '$src/lib/server/data/queries/campaign-session.js';
 import { getCampaign } from '$src/lib/server/data/queries/campaign';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
@@ -24,6 +27,11 @@ const campaignIdSchema = z.object({
 	campaignId: z.string()
 });
 
+const deleteSessionSchema = z.object({
+	sessionNumber: z.string(),
+	campaignId: z.string()
+});
+
 export const actions: Actions = {
 	addSession: async ({ request, locals }) => {
 		const session = await locals.auth.validate();
@@ -33,7 +41,25 @@ export const actions: Actions = {
 
 		await createNewCampaignSession(session.user.userId, campaignId);
 	},
-	delete: async ({ locals, request }) => {
+	deleteSession: async ({ locals, request }) => {
+		const session = await locals.auth.validate();
+		if (!session) throw error(401);
+
+		const { sessionNumber, campaignId } = await parseFormDataOrThrow400(
+			request,
+			deleteSessionSchema
+		);
+
+		const wasAllowedToDeleteSession = await deleteCampaignSession(
+			session.user.userId,
+			campaignId,
+			Number(sessionNumber) // TODO: fix Zod weirdness here
+		);
+		if (!wasAllowedToDeleteSession) {
+			throw error(403);
+		}
+	},
+	deleteCampaign: async ({ locals, request }) => {
 		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 

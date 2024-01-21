@@ -18,6 +18,8 @@
 	import Divider from '$src/lib/components/Divider.svelte';
 	import InputField from '$src/lib/components/InputField.svelte';
 	import H1 from '$src/lib/components/H1.svelte';
+	import DeleteIcon from '$src/lib/icons/DeleteIcon.svelte';
+	import HiddenFormValue from '$src/lib/components/HiddenFormValue.svelte';
 
 	export let data;
 
@@ -119,7 +121,7 @@
 							>
 							<form
 								method="POST"
-								action="?/delete"
+								action="?/deleteCampaign"
 								use:enhance={({ cancel }) => {
 									const isDeleteConfirmed = confirm('Are you sure?');
 									if (!isDeleteConfirmed) cancel();
@@ -168,7 +170,7 @@
 				<div
 					class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
 				>
-					{#each data.campaign?.sessions as campaignSession (`${data.campaign?.id}${campaignSession.sessionNumber}`)}
+					{#each data.campaign?.sessions as campaignSession, index (`${data.campaign?.id}${campaignSession.sessionNumber}`)}
 						<div
 							class="scrollbar-thumb-slate-800 scrollbar-track-slate-900 scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg scrollbar-thin flex max-h-48 flex-col overflow-y-auto rounded-lg bg-red-900/10 bg-opacity-20 backdrop-blur"
 						>
@@ -187,6 +189,21 @@
 										href={`/campaign/${data.id}/${campaignSession.sessionNumber}/note/create`}
 										><AddNoteIcon class="size-6" /></TextLinkButton
 									>
+									{#if index === 0}
+										<form
+											method="POST"
+											action="?/deleteSession"
+											use:enhance={({ cancel }) => {
+												const isDeleteConfirmed = confirm('Are you sure?');
+												if (!isDeleteConfirmed) cancel();
+											}}
+											class="flex justify-center"
+										>
+											<HiddenFormValue name="campaignId" value={data.campaign.id} />
+											<HiddenFormValue name="sessionNumber" value={campaignSession.sessionNumber} />
+											<DeleteTextButton class="size-6" />
+										</form>
+									{/if}
 								</div>
 							</div>
 							<div class="flex h-full flex-col gap-y-2 p-4 py-2">

@@ -1,4 +1,4 @@
-import { max, eq } from 'drizzle-orm';
+import { max, eq, and } from 'drizzle-orm';
 import { db } from '$src/lib/server/data/db';
 import { campaignSession } from '$src/lib/server/data/schema';
 
@@ -12,10 +12,26 @@ export async function getLastSessionNumberForCampaign(campaignId: string) {
 	return lastSessionNumber;
 }
 
-		// TODO: add check for players here
+// TODO: add check for players here
 export async function createNewCampaignSession(userId: string, campaignId: string) {
 	await db.insert(campaignSession).values({
 		campaignId: campaignId,
-		sessionNumber: (await getLastSessionNumberForCampaign(campaignId)) + 1,
+		sessionNumber: (await getLastSessionNumberForCampaign(campaignId)) + 1
 	});
+}
+
+export async function deleteCampaignSession(
+	userId: string,
+	campaignId: string,
+	sessionNumber: number
+) {
+	await db
+		.delete(campaignSession)
+		.where(
+			and(
+				eq(campaignSession.campaignId, campaignId),
+				eq(campaignSession.sessionNumber, sessionNumber)
+			)
+		);
+	return true;
 }
