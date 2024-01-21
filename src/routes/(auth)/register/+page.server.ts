@@ -3,6 +3,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { z } from 'zod';
 import { parseFormData } from '$src/lib/util/parse-form-data';
+import { LuciaError } from 'lucia';
 
 const registerUserSchema = z.object({
 	email: z.string().email(),
@@ -41,9 +42,18 @@ export const actions: Actions = {
 			});
 			locals.auth.setSession(session);
 		} catch (e) {
+			if (e instanceof LuciaError) {
+				const message = e.message;
+
+				if (message === 'AUTH_DUPLICATE_KEY_ID') {
+					return fail(400, {
+						message: 'User already exists with this e-mail!'
+					});
+				}
+			}
 			console.error(`Failed to register user: ${username}`, e);
 			return fail(500, {
-				message: 'An unknown error occurred'
+				message: 'An unknown error occurred, bug Kristiāns about not handling it'
 			});
 		}
 
