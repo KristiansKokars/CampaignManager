@@ -18,6 +18,6 @@
 		</a>
 	</div>
 	<div>
-		<p>© 2024 Kristiāns Kokars. All rights reserved.</p>
+		<p>© 2024 Kristiāns Kokars</p>
 	</div>
 </div>
