@@ -63,7 +63,7 @@ export const campaign = mysqlTable('campaign', {
 	id: varchar('id', { length: 256 }).primaryKey(),
 	dungeonMasterId: varchar('dungeon_master_id', { length: 15 })
 		.notNull()
-		.references(() => user.id),
+		.references(() => user.id, { onDelete: 'cascade' }),
 	name: varchar('name', { length: 256 }).notNull(),
 	status: mysqlEnum('status', [
 		'not_started',
@@ -111,7 +111,7 @@ export const campaignNotes = mysqlTable('campaign_note', {
 	campaignId: varchar('campaign_id', { length: 256 }).notNull(),
 	authorId: varchar('author_id', { length: 15 })
 		.notNull()
-		.references(() => user.id)
+		.references(() => user.id, { onDelete: 'cascade' })
 });
 
 export const campaignNotesRelations = relations(campaignNotes, ({ one }) => ({
@@ -130,12 +130,12 @@ export const campaignInvite = mysqlTable(
 	{
 		campaignId: varchar('campaign_id', { length: 256 })
 			.notNull()
-			.references(() => campaign.id),
+			.references(() => campaign.id, { onDelete: 'cascade' }),
 		invitedUserId: varchar('invited_user_id', {
 			length: 15
 		})
 			.notNull()
-			.references(() => user.id),
+			.references(() => user.id, { onDelete: 'cascade' }),
 		status: mysqlEnum('status', ['declined', 'accepted', 'sent']).default('sent')
 	},
 	(table) => {
