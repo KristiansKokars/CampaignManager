@@ -1,20 +1,17 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
+	import { cn } from '$src/lib/util/cn.js';
 	import Button from '$src/lib/components/buttons/Button.svelte';
 	import Dialog from '$src/lib/components/Dialog.svelte';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
-	import LinkButton from '$src/lib/components/buttons/LinkButton.svelte';
 	import dayjs from 'dayjs';
 	import TopLayout from '$src/lib/components/TopLayout.svelte';
-	import PageGlassCard from '$src/lib/components/PageGlassCard.svelte';
 	import Overlap from '$src/lib/components/Overlap.svelte';
 	import EditIcon from '$src/lib/icons/EditIcon.svelte';
-	import DeleteIcon from '$src/lib/icons/DeleteIcon.svelte';
 	import TextButton from '$src/lib/components/buttons/TextButton.svelte';
 	import TextLinkButton from '$src/lib/components/buttons/TextLinkButton.svelte';
 	import DeleteTextButton from '$src/lib/components/buttons/DeleteTextButton.svelte';
-	import { cn } from '$src/lib/util/cn.js';
 	import LeaveIcon from '$src/lib/icons/LeaveIcon.svelte';
 	import AddUserIcon from '$src/lib/icons/AddUserIcon.svelte';
 	import AddNoteIcon from '$src/lib/icons/AddNoteIcon.svelte';
@@ -152,7 +149,7 @@
 										class="w-full rounded-md bg-slate-900/70 p-2 hover:bg-slate-900/85"
 										href={`/campaign/${data.id}/${campaignSession.sessionNumber}/note/${note.id}`}
 									>
-										<p>{note.title}</p>
+										<p class="font-bold">{note.title}</p>
 										<Divider />
 										<p class="text-end text-sm font-light">{note.author.username}</p></a
 									>

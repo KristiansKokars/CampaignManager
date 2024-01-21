@@ -21,9 +21,7 @@
 			<TextArea name="text" id="text" value="">Text</TextArea>
 			<button type="submit">Create</button>
 		</form>
-		{#if form?.message}
-			<p class="font-bold text-red-400">{form?.message}</p>
-		{/if}
+
 		{#if form?.error}
 			{#each form?.allFieldErrors as fieldError}
 				<p class="text-red-400">{fieldError.field}: {fieldError.message}</p>

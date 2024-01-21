@@ -2,9 +2,7 @@
 	import { enhance } from '$app/forms';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 	import Divider from '$src/lib/components/Divider.svelte';
-	import TextButton from '$src/lib/components/buttons/TextButton.svelte';
 	import TextLinkButton from '$src/lib/components/buttons/TextLinkButton.svelte';
-	import DeleteIcon from '$src/lib/icons/DeleteIcon.svelte';
 	import EditIcon from '$src/lib/icons/EditIcon.svelte';
 	import DeleteTextButton from '$src/lib/components/buttons/DeleteTextButton.svelte';
 
@@ -18,6 +16,7 @@
 				<h1 class="text-3xl font-bold">{data.note.title}</h1>
 				<div class="flex items-center gap-x-2">
 					<TextLinkButton
+						title="Edit note"
 						href={`/campaign/${data.campaignId}/${data.sessionNumber}/note/${data.noteId}/edit`}
 					>
 						<EditIcon />

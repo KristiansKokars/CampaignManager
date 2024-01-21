@@ -3,7 +3,7 @@
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 </script>
 
-<div class="min-h-lvh max-w-screen-xl px-4 pt-48 lg:ml-72">
+<div class="min-h-lvh max-w-screen-xl px-4 pt-40 lg:ml-72">
 	<GlassCard class="max-w-2xl flex-col backdrop-blur-sm">
 		<h1 class="pb-4 font-nunito text-2xl font-extrabold sm:text-3xl">
 			Manage your on-going campaigns and adventures with ease.
