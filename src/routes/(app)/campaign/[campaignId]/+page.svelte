@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
-	import Button from '$src/lib/components/Button.svelte';
+	import Button from '$src/lib/components/buttons/Button.svelte';
 	import Dialog from '$src/lib/components/Dialog.svelte';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
-	import LinkButton from '$src/lib/components/LinkButton.svelte';
+	import LinkButton from '$src/lib/components/buttons/LinkButton.svelte';
 	import dayjs from 'dayjs';
 
 	export let data;

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Button from '$src/lib/components/Button.svelte';
+	import Button from '$src/lib/components/buttons/Button.svelte';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 	import InputField from '$src/lib/components/InputField.svelte';
 	import type { ActionData } from './$types';
-	import LinkButton from '$src/lib/components/LinkButton.svelte';
+	import LinkButton from '$src/lib/components/buttons/LinkButton.svelte';
 	import GitHubIcon from '$src/lib/icons/GitHubIcon.svelte';
 	import MailIcon from '$src/lib/icons/MailIcon.svelte';
 

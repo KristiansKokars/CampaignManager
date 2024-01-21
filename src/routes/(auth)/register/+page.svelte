@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Button from '$src/lib/components/Button.svelte';
+	import Button from '$src/lib/components/buttons/Button.svelte';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 	import InputField from '$src/lib/components/InputField.svelte';
 	import type { ActionData } from './$types';
