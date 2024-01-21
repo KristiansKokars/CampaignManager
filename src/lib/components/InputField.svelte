@@ -10,10 +10,11 @@
 <div class="flex flex-col gap-1">
 	<label for={id}><slot /></label>
 	<input
-		{type}
+		on:input
+		{...{ type }}
 		{name}
 		{id}
-		{value}
+		bind:value
 		{required}
 		{accept}
 		class="rounded-sm bg-gray-200 bg-opacity-20 px-2 py-1 focus:outline-none focus:outline-1 focus:outline-gray-300"

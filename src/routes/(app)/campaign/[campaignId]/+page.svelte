@@ -16,6 +16,7 @@
 	import AddUserIcon from '$src/lib/icons/AddUserIcon.svelte';
 	import AddNoteIcon from '$src/lib/icons/AddNoteIcon.svelte';
 	import Divider from '$src/lib/components/Divider.svelte';
+	import InputField from '$src/lib/components/InputField.svelte';
 
 	export let data;
 
@@ -25,12 +26,27 @@
 	// TODO: only local cache for now
 	let sentInvitesToPlayers: Map<string, boolean> = new Map();
 
-	$: onSearchForPlayers(playerQuery);
-	async function onSearchForPlayers(username: string) {
+	let timeout: NodeJS.Timeout | undefined;
+	let wereNoPlayersFound = false;
+
+	function onSearchForPlayers() {
 		if (!browser) return;
 
-		const response = await fetch(`/api/player?username=${username}`);
-		foundPlayers = await response.json();
+		if (timeout) {
+			clearTimeout(timeout);
+		}
+		timeout = setTimeout(async () => {
+			if (!playerQuery) {
+				foundPlayers = [];
+				wereNoPlayersFound = false;
+				return;
+			}
+
+			const response = await fetch(`/api/player?username=${playerQuery}`);
+			const playersInResponse = await response.json();
+			foundPlayers = playersInResponse;
+			wereNoPlayersFound = playersInResponse.length === 0;
+		}, 300);
 	}
 
 	async function sendInvite(userId: string) {
@@ -45,19 +61,32 @@
 
 {#if data.isDungeonMasterForCampaign}
 	<Dialog bind:dialog on:click={() => dialog.close()}>
+		<p slot="title" class="text-lg font-bold">Search for players</p>
 		<div class="p-4">
-			<p>Search for players</p>
-			<input type="text" name="player" bind:value={playerQuery} />
-			{#each foundPlayers as foundPlayer (foundPlayer.userId)}
-				<div class="flex gap-x-4">
-					<p>{foundPlayer.username}#{foundPlayer.userId}</p>
-					{#if sentInvitesToPlayers.get(foundPlayer.userId)}
-						<p>Invite sent</p>
-					{:else}
-						<button on:click={() => sendInvite(foundPlayer.userId)}>Send invite</button>
-					{/if}
+			<InputField
+				id="text"
+				type="text"
+				name="player"
+				bind:value={playerQuery}
+				on:input={onSearchForPlayers}
+			/>
+			{#if wereNoPlayersFound}
+				<p class="pt-4">No players were found with name {playerQuery}!</p>
+			{/if}
+			{#if foundPlayers.length !== 0}
+				<div class="flex flex-col gap-y-2 pt-4">
+					{#each foundPlayers as foundPlayer (foundPlayer.userId)}
+						<div class="flex justify-between gap-x-4">
+							<p>{foundPlayer.username}</p>
+							{#if sentInvitesToPlayers.get(foundPlayer.userId)}
+								<p>Invite sent</p>
+							{:else}
+								<TextButton on:click={() => sendInvite(foundPlayer.userId)}>Send invite</TextButton>
+							{/if}
+						</div>
+					{/each}
 				</div>
-			{/each}
+			{/if}
 		</div>
 	</Dialog>
 {/if}
