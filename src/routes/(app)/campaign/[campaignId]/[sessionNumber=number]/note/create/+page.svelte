@@ -5,6 +5,7 @@
 	import PageGlassCard from '$src/lib/components/PageGlassCard.svelte';
 	import TextArea from '$src/lib/components/TextArea.svelte';
 	import TopLayout from '$src/lib/components/TopLayout.svelte';
+	import Button from '$src/lib/components/buttons/Button.svelte';
 	import type { ActionData } from './$types.js';
 
 	export let data;
@@ -19,7 +20,7 @@
 			<input type="hidden" name="sessionNumber" value={data.sessionNumber} />
 			<InputField name="title" id="title" value="">Title</InputField>
 			<TextArea name="text" id="text" value="">Text</TextArea>
-			<button type="submit">Create</button>
+			<Button class="mx-auto px-4">Create</Button>
 		</form>
 
 		{#if form?.error}
