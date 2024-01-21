@@ -6,6 +6,7 @@
 	import TextLinkButton from '$src/lib/components/buttons/TextLinkButton.svelte';
 	import PlusSquareIcon from '$src/lib/icons/PlusSquareIcon.svelte';
 	import TopLayout from '$src/lib/components/TopLayout.svelte';
+	import H1 from '$src/lib/components/H1.svelte';
 
 	export let data;
 </script>
@@ -14,7 +15,7 @@
 	<PageGlassCard
 		class="flex w-full max-w-screen-2xl flex-col items-start justify-start break-all rounded-md bg-gray-800 bg-opacity-70 bg-clip-padding backdrop-blur backdrop-filter"
 	>
-		<H2>Your campaigns as a player</H2>
+		<H1>Your campaigns as a player</H1>
 		{#await data.playerCampaigns}
 			<div class="flex items-center justify-center"><LoadingSpinner /></div>
 		{:then playerCampaignResponse}
@@ -42,7 +43,7 @@
 			{/if}
 		{/await}
 		<div class="mt-8 flex items-center gap-2">
-			<H2>Your campaigns as a dungeon master</H2>
+			<H1>Your campaigns as a dungeon master</H1>
 			<TextLinkButton title="Make new campaign" href="/campaign/new"
 				><PlusSquareIcon class="size-6" /></TextLinkButton
 			>

@@ -17,6 +17,7 @@
 	import AddNoteIcon from '$src/lib/icons/AddNoteIcon.svelte';
 	import Divider from '$src/lib/components/Divider.svelte';
 	import InputField from '$src/lib/components/InputField.svelte';
+	import H1 from '$src/lib/components/H1.svelte';
 
 	export let data;
 
@@ -107,7 +108,7 @@
 			{/if}
 			<div class="flex flex-col p-4">
 				<div class="flex justify-between">
-					<h1 class="text-2xl font-bold sm:text-3xl">{data.campaign?.name}</h1>
+					<H1>{data.campaign?.name}</H1>
 					<div class="flex items-center justify-center rounded-md bg-slate-900/20 backdrop-blur-lg">
 						{#if data.isDungeonMasterForCampaign}
 							<TextButton on:click={() => dialog.showModal()} title="Invite players to campaign">
