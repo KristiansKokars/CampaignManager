@@ -117,12 +117,28 @@
 							<TextLinkButton href={`/campaign/${data.campaign.id}/edit`} title="Edit"
 								><EditIcon /></TextLinkButton
 							>
-							<form method="POST" action="?/delete" use:enhance class="flex justify-center">
+							<form
+								method="POST"
+								action="?/delete"
+								use:enhance={({ cancel }) => {
+									const isDeleteConfirmed = confirm('Are you sure?');
+									if (!isDeleteConfirmed) cancel();
+								}}
+								class="flex justify-center"
+							>
 								<input type="hidden" name="campaignId" value={data.campaign.id} />
 								<DeleteTextButton />
 							</form>
 						{:else}
-							<form method="POST" action="?/leave" use:enhance class="flex justify-center">
+							<form
+								method="POST"
+								action="?/leave"
+								use:enhance={({ cancel }) => {
+									const isDeleteConfirmed = confirm('Are you sure?');
+									if (!isDeleteConfirmed) cancel();
+								}}
+								class="flex justify-center"
+							>
 								<input type="hidden" name="campaignId" value={data.campaign.id} />
 								<TextButton class="text-red-400/80 hover:text-red-400" title="Leave campaign"
 									><LeaveIcon /></TextButton

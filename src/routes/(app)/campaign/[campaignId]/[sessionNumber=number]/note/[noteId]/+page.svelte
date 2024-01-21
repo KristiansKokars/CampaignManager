@@ -24,7 +24,10 @@
 					<form
 						method="POST"
 						action={`/campaign/${data.campaignId}/${data.sessionNumber}/note/${data.noteId}/delete?`}
-						use:enhance
+						use:enhance={({ cancel }) => {
+							const isDeleteConfirmed = confirm('Are you sure?');
+							if (!isDeleteConfirmed) cancel();
+						}}
 					>
 						<input type="hidden" name="campaignId" value={data.campaignId} />
 						<input type="hidden" name="noteId" value={data.noteId} />
