@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
+	import Divider from '$src/lib/components/Divider.svelte';
 	import TextButton from '$src/lib/components/buttons/TextButton.svelte';
 	import TextLinkButton from '$src/lib/components/buttons/TextLinkButton.svelte';
 
@@ -29,7 +30,7 @@
 					</TextLinkButton>
 				</div>
 			</div>
-			<div class="my-1 h-0.5 bg-gray-200/20 bg-opacity-40" />
+			<Divider />
 			<p>{data.note.text}</p>
 		{:else}
 			<p>Note not found!</p>
