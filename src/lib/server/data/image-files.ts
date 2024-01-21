@@ -38,7 +38,11 @@ export async function deleteBannerImage(bannerUrl: string, campaignId: string) {
 		});
 		console.log(`Delete banner image for campaign ${campaignId} result: ${JSON.stringify(result)}`);
 	} else {
-		unlinkSync(localCampaignImagePath(campaignId));
+		try {
+			unlinkSync(localCampaignImagePath(campaignId));
+		} catch (e) {
+			console.error(e);
+		}
 	}
 }
 

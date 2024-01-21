@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { cn } from '$src/lib/util/cn';
 	import InviteButton from './buttons/InviteButton.svelte';
-	import NavlinkButton from './buttons/NavlinkButton.svelte';
+	import NavlinkButton from './NavlinkButton.svelte';
 
 	export let isLoggedIn: boolean = false;
 	export let hasUncheckedCampaignInvites: boolean;

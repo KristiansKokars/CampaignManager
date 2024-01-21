@@ -2,12 +2,14 @@
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 	import H2 from '$src/lib/components/H2.svelte';
 	import LoadingSpinner from '$src/lib/components/LoadingSpinner.svelte';
+	import PageGlassCard from '$src/lib/components/PageGlassCard.svelte';
+	import TopLayout from '$src/lib/components/TopLayout.svelte';
 
 	export let data;
 </script>
 
-<div class="mt-40 flex flex-col gap-10">
-	<GlassCard class="flex-col gap-y-10">
+<TopLayout>
+	<PageGlassCard class="items-start justify-start">
 		<H2>Your campaigns as a player</H2>
 		{#await data.playerCampaigns}
 			<div class="flex items-center justify-center"><LoadingSpinner /></div>
@@ -48,5 +50,5 @@
 				{/if}
 			{/await}
 		</div>
-	</GlassCard>
-</div>
+	</PageGlassCard>
+</TopLayout>

@@ -6,6 +6,7 @@
 	import TextLinkButton from '$src/lib/components/buttons/TextLinkButton.svelte';
 	import DeleteIcon from '$src/lib/icons/DeleteIcon.svelte';
 	import EditIcon from '$src/lib/icons/EditIcon.svelte';
+	import DeleteTextButton from '$src/lib/components/buttons/DeleteTextButton.svelte';
 
 	export let data;
 </script>
@@ -28,7 +29,7 @@
 					>
 						<input type="hidden" name="campaignId" value={data.campaignId} />
 						<input type="hidden" name="noteId" value={data.noteId} />
-						<TextButton class=" text-red-400/80 hover:text-red-400"><DeleteIcon /></TextButton>
+						<DeleteTextButton />
 					</form>
 				</div>
 			</div>

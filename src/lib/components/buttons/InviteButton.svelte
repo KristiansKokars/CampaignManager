@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import NavlinkButton from './NavlinkButton.svelte';
+	import NavlinkButton from '../NavlinkButton.svelte';
 
 	export let hasUncheckedCampaignInvites: boolean;
 </script>

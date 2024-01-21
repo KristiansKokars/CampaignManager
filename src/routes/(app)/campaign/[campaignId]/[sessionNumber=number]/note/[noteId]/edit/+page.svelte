@@ -3,6 +3,7 @@
 	import GlassCard from '$src/lib/components/GlassCard.svelte';
 	import InputField from '$src/lib/components/InputField.svelte';
 	import TextArea from '$src/lib/components/TextArea.svelte';
+	import TopLayout from '$src/lib/components/TopLayout.svelte';
 	import Button from '$src/lib/components/buttons/Button.svelte';
 	import TextButton from '$src/lib/components/buttons/TextButton.svelte';
 	import type { ActionData } from './$types';
@@ -14,7 +15,7 @@
 	let textInput = data.note?.text ?? '';
 </script>
 
-<div class="mt-40 flex justify-center">
+<TopLayout>
 	<GlassCard class="w-full max-w-screen-lg flex-col items-center justify-center break-all">
 		<h1 class="text-2xl font-bold">Edit Note</h1>
 		<form method="post" use:enhance class="flex w-full flex-col gap-4">
@@ -34,4 +35,4 @@
 			{/each}
 		{/if}
 	</GlassCard>
-</div>
+</TopLayout>

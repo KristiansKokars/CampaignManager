@@ -1,6 +1,6 @@
 import { db } from '$src/lib/server/data/db';
-import { campaign, campaignInvite } from '$src/lib/server/data/schema';
-import { and, eq } from 'drizzle-orm';
+import { campaign, campaignInvite, campaignSession } from '$src/lib/server/data/schema';
+import { and, desc, eq } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { uploadBannerImage, deleteBannerImage } from '$src/lib/server/data/image-files';
@@ -52,7 +52,8 @@ export async function getCampaign(userId: string, campaignId: string) {
 			sessions: {
 				with: {
 					notes: true
-				}
+				},
+				orderBy: [desc(campaignSession.sessionNumber)]
 			},
 			campaignInvites: {
 				columns: {
