@@ -5,7 +5,6 @@
 	import InviteButton from '$lib/components/buttons/InviteButton.svelte';
 	import LinearLoadingIndicator from '$lib/components/LinearLoadingIndicator.svelte';
 	import NavlinkButton from '$lib/components/NavlinkButton.svelte';
-	import { derived } from 'svelte/store';
 	import type { Navigation } from '@sveltejs/kit';
 
 	export let isLoggedIn: boolean = false;
