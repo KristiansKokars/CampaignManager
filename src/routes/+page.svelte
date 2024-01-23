@@ -15,7 +15,7 @@
 		</p>
 	</GlassCard>
 	<div class="grow" />
-	<div class="my-10 w-full flex-col p-4 backdrop-blur-sm sm:w-fit">
+	<div class="my-20 w-full flex-col p-4 backdrop-blur-sm sm:w-fit">
 		<H2 class="pb-4">Made with</H2>
 		<div class="flex gap-x-8">
 			<svg
