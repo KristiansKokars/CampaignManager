@@ -26,12 +26,14 @@
 	$: onNavigating($navigating);
 
 	function onNavigating(navigating: Navigation | null) {
+		console.log(navigating);
 		if (!navigating) {
 			clearTimeout(timeout);
 			showLoadingIndicator = false;
 			return;
 		}
 
+		clearTimeout(timeout);
 		timeout = setTimeout(() => {
 			showLoadingIndicator = true;
 		}, 300);
