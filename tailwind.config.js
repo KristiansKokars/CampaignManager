@@ -3,6 +3,12 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
+			keyframes: {
+				fromStartToEnd: {
+					'0%': { right: '100%' },
+					'100%': { right: '-40%' }
+				}
+			},
 			fontFamily: {
 				supreme: 'Supreme-Variable',
 				nunito: 'Nunito-Variable'
