@@ -6,6 +6,7 @@
 	import LinearLoadingIndicator from '$lib/components/LinearLoadingIndicator.svelte';
 	import NavlinkButton from '$lib/components/NavlinkButton.svelte';
 	import { derived } from 'svelte/store';
+	import type { Navigation } from '@sveltejs/kit';
 
 	export let isLoggedIn: boolean = false;
 	export let hasUncheckedCampaignInvites: boolean;
@@ -22,25 +23,27 @@
 	];
 
 	let timeout: NodeJS.Timeout;
-	let showLoadingIndicator = derived(navigating, (navigating) => {
+	let showLoadingIndicator = false;
+	$: onNavigating($navigating);
+
+	function onNavigating(navigating: Navigation | null) {
 		if (!navigating) {
 			clearTimeout(timeout);
-			return false;
+			showLoadingIndicator = false;
+			return;
 		}
-		
-		timeout = setTimeout(() => {
-			return true;
-		}, 300);
 
-		return false;
-	});
+		timeout = setTimeout(() => {
+			showLoadingIndicator = true;
+		}, 300);
+	}
 </script>
 
 <div class="sticky top-0 z-40 h-16">
 	<div
 		class={cn(
 			'flex h-14 bg-gray-800 bg-opacity-70 bg-clip-padding p-2 text-sm backdrop-blur backdrop-filter sm:text-base',
-			!$showLoadingIndicator && 'border-b border-gray-200/10 border-opacity-40'
+			!showLoadingIndicator && 'border-b border-gray-200/10 border-opacity-40'
 		)}
 	>
 		<nav class="mx-auto flex w-full max-w-[90rem] items-center justify-between px-4">
@@ -85,7 +88,7 @@
 			</div>
 		</nav>
 	</div>
-	{#if $showLoadingIndicator}
+	{#if showLoadingIndicator}
 		<LinearLoadingIndicator />
 	{/if}
 </div>
