@@ -1,6 +1,35 @@
+![Campaign Manager](screenshots/CampaignManagerSplash.png "Campaign Manager")
+
 # Campaign Manager
 
-## Developing
+==================
+
+# Features
+
+==================
+
+- Email and GitHub authentication
+- Creating new campaigns, with edit and delete functionality
+- Invite other players to your campaign, accept or deny invites
+- Visible notification in the navbar when you receive an invite
+- Create sessions and add/edit/delete notes for all players to see in the campaign
+
+# Technologies
+
+==================
+
+- SvelteKit
+- Typescript
+- Tailwind CSS
+- Drizzle ORM
+- Zod
+- Cloudinary
+- Planetscale
+- Vercel
+
+# Developing
+
+==================
 
 1. Run the install command (make sure to have [pnpm installed](https://pnpm.io))
 
