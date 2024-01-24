@@ -2,7 +2,7 @@
 
 # Campaign Manager
 
-# Features
+## Features
 
 - Email and GitHub authentication
 - Creating new campaigns, with edit and delete functionality
@@ -10,7 +10,7 @@
 - Visible notification in the navbar when you receive an invite
 - Create sessions and add/edit/delete notes for all players to see in the campaign
 
-# Technologies
+## Technologies
 
 - SvelteKit
 - Typescript
@@ -21,7 +21,7 @@
 - Planetscale
 - Vercel
 
-# Developing
+## Developing
 
 1. Run the install command (make sure to have [pnpm installed](https://pnpm.io))
 
