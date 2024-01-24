@@ -1,12 +1,8 @@
-![Campaign Manager](screenshots/CampaignManagerSplash.png "Campaign Manager")
+![Campaign Manager](screenshots/CampaignManagerSplash.png 'Campaign Manager')
 
 # Campaign Manager
 
-==================
-
 # Features
-
-==================
 
 - Email and GitHub authentication
 - Creating new campaigns, with edit and delete functionality
@@ -15,8 +11,6 @@
 - Create sessions and add/edit/delete notes for all players to see in the campaign
 
 # Technologies
-
-==================
 
 - SvelteKit
 - Typescript
@@ -28,8 +22,6 @@
 - Vercel
 
 # Developing
-
-==================
 
 1. Run the install command (make sure to have [pnpm installed](https://pnpm.io))
 
