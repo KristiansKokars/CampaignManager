@@ -8,7 +8,7 @@ import { uploadBannerImage, deleteBannerImage } from '$src/lib/server/data/image
 export const createCampaignSchema = z.object({
 	name: z.string().max(254),
 	description: z.string().nullable(),
-	banner: z.instanceof(Blob)
+	banner: z.instanceof(Blob).nullable()
 });
 export type CreateCampaignData = z.infer<typeof createCampaignSchema>;
 
@@ -18,10 +18,13 @@ export async function createNewCampaign(
 ) {
 	const campaignId = nanoid();
 	let bannerUrl = '';
-	try {
-		bannerUrl = await uploadBannerImage(campaignId, createCampaignData.banner as File);
-	} catch (e) {
-		console.error(`Could not upload picture for ${createCampaignData.name}, skipping...`);
+
+	if (createCampaignData.banner) {
+		try {
+			bannerUrl = await uploadBannerImage(campaignId, createCampaignData.banner as File);
+		} catch (e) {
+			console.error(`Could not upload picture for ${createCampaignData.name}, skipping...`);
+		}
 	}
 
 	await db.insert(campaign).values({
