@@ -11,6 +11,7 @@ export async function load({ locals, params }) {
 	return {
 		campaignId: params.campaignId,
 		sessionNumber: params.sessionNumber,
+		isAuthor: session.user.userId === note.authorId,
 		noteId: params.noteId,
 		note: note
 	};
