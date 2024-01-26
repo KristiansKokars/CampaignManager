@@ -54,6 +54,8 @@
 		"lucia": "^2.7.6",
 		"mysql2": "^3.6.5",
 		"nanoid": "^5.0.4",
+		"pusher": "^5.2.0",
+		"pusher-js": "8.4.0-rc2",
 		"tailwind-merge": "^2.2.0",
 		"zod": "^3.22.4"
 	}

@@ -3,6 +3,7 @@ import { campaignInvite } from '$src/lib/server/data/schema.js';
 import { error } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { serverPusher } from '$src/lib/server/data/server-pusher';
 
 const sendInviteSchema = z.object({
 	campaignId: z.string(),
@@ -26,6 +27,8 @@ export async function POST({ request, locals }) {
 			invitedUserId: userId
 		})
 		.onDuplicateKeyUpdate({ set: { campaignId: sql`campaign_id` } }); // do nothing on conflict
+
+	serverPusher.trigger(userId, 'invite', {});
 
 	return new Response(null, { status: 200 });
 }

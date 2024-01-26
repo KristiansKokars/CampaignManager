@@ -2,7 +2,9 @@ import { db } from '$src/lib/server/data/db';
 import { campaignInvite } from '$src/lib/server/data/schema';
 import { and, eq } from 'drizzle-orm';
 
-export async function load({ locals }) {
+export async function load({ locals, depends }) {
+	depends('invite:hasUncheckedCampaignInvites');
+
 	const session = await locals.auth.validate();
 
 	let hasUncheckedCampaignInvites = false;
@@ -17,6 +19,7 @@ export async function load({ locals }) {
 	}
 
 	return {
+		userId: session?.user.userId,
 		isLoggedIn: session !== null,
 		hasUncheckedCampaignInvites: hasUncheckedCampaignInvites
 	};

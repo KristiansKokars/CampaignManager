@@ -1,14 +1,27 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { invalidate } from '$app/navigation';
 	import '$src/app.css';
+	import { pusher } from '$src/lib/client-pusher.js';
 	import Footer from '$src/lib/components/Footer.svelte';
 	import Navbar from '$src/lib/components/Navbar.svelte';
 	import Overlap from '$src/lib/components/Overlap.svelte';
 	import DragonImage from '$src/lib/img/dragon.jpg?enhanced';
 	import { enableViewTransitionsForSupportedBrowsers } from '$src/lib/util/enable-view-transitions.js';
+	import { onMount } from 'svelte';
 
 	export let data;
 
 	enableViewTransitionsForSupportedBrowsers();
+
+	onMount(() => {
+		if (!browser || !data.userId) return;
+
+		pusher.subscribe(data.userId);
+		pusher.bind('invite', () => {
+			invalidate('invite:hasUncheckedCampaignInvites');
+		});
+	});
 </script>
 
 <svelte:head>
