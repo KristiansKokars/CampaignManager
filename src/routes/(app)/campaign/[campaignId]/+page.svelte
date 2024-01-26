@@ -152,13 +152,18 @@
 				<div class="flex h-full justify-between">
 					<p
 						class={cn(
-							'h-fit max-h-24 w-fit overflow-y-auto rounded-md pr-4',
+							'h-fit max-h-24 w-fit overflow-y-auto rounded-md ',
 							data.campaign.bannerUrl && 'bg-slate-900/20 backdrop-blur'
 						)}
 					>
 						{data.campaign?.description}
 					</p>
-					<form method="POST" action="?/addSession" use:enhance class="flex items-end">
+					<form
+						method="POST"
+						action="?/addSession"
+						use:enhance
+						class="flex min-w-32 items-end justify-end"
+					>
 						<input type="hidden" name="campaignId" value={data.campaign.id} />
 						<Button class="">Add Session</Button>
 					</form>
@@ -172,7 +177,7 @@
 				>
 					{#each data.campaign?.sessions as campaignSession, index (`${data.campaign?.id}${campaignSession.sessionNumber}`)}
 						<div
-							class="scrollbar-thumb-slate-800 scrollbar-track-slate-900 scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg scrollbar-thin flex max-h-48 flex-col overflow-y-auto rounded-lg bg-red-900/10 bg-opacity-20 backdrop-blur"
+							class="flex max-h-48 flex-col overflow-y-auto rounded-lg bg-red-900/10 bg-opacity-20 backdrop-blur scrollbar-thin scrollbar-track-slate-900 scrollbar-thumb-slate-800 scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg"
 						>
 							<div
 								class="sticky top-0 flex items-center border-b border-gray-600/20 border-opacity-40 bg-gray-800/70 bg-opacity-70 bg-clip-padding p-4 backdrop-blur backdrop-filter"
