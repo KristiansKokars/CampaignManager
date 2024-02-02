@@ -17,6 +17,7 @@
 	onMount(() => {
 		if (!browser || !data.userId) return;
 
+		console.log('subbed');
 		pusher.subscribe(data.userId);
 		pusher.bind('invite', () => {
 			invalidate('invite:hasUncheckedCampaignInvites');

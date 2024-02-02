@@ -46,6 +46,8 @@
 		"@lucia-auth/adapter-mysql": "^2.1.0",
 		"@lucia-auth/oauth": "^3.5.1",
 		"@types/node": "^20.11.5",
+		"@upstash/ratelimit": "^1.0.0",
+		"@upstash/redis": "^1.28.3",
 		"cloudinary": "^1.41.3",
 		"clsx": "^2.1.0",
 		"dayjs": "^1.11.10",
