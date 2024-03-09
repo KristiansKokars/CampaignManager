@@ -7,6 +7,7 @@
 	import Navbar from '$src/lib/components/Navbar.svelte';
 	import Overlap from '$src/lib/components/Overlap.svelte';
 	import DragonImage from '$src/lib/img/dragon.jpg?enhanced';
+	import { logger } from '$src/lib/logger.js';
 	import { enableViewTransitionsForSupportedBrowsers } from '$src/lib/util/enable-view-transitions.js';
 	import { onMount } from 'svelte';
 
@@ -17,7 +18,7 @@
 	onMount(() => {
 		if (!browser || !data.userId) return;
 
-		console.log('subbed');
+		logger.info('Subscribed to Pusher notifications');
 		pusher.subscribe(data.userId);
 		pusher.bind('invite', () => {
 			invalidate('invite:hasUncheckedCampaignInvites');
