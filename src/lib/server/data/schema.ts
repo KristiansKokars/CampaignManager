@@ -1,79 +1,65 @@
-import { relations } from 'drizzle-orm';
-import {
-	bigint,
-	boolean,
-	int,
-	mysqlEnum,
-	mysqlTableCreator,
-	primaryKey,
-	text,
-	timestamp,
-	varchar
-} from 'drizzle-orm/mysql-core';
+import { relations, sql } from 'drizzle-orm';
+import { primaryKey, text, sqliteTableCreator, integer, blob } from 'drizzle-orm/sqlite-core';
 
 export const tablePrefix = 'cm_';
 
-export const mysqlTable = mysqlTableCreator((name) => `${tablePrefix}${name}`);
+export const sqliteTable = sqliteTableCreator((name) => `${tablePrefix}${name}`);
 
-export const user = mysqlTable('auth_user', {
-	id: varchar('id', {
+export const user = sqliteTable('auth_user', {
+	id: text('id', {
 		length: 15
 	}).primaryKey(),
-	username: varchar('username', { length: 254 }),
-	email: varchar('email', { length: 320 }),
-	emailVerified: boolean('email_verified')
+	username: text('username', { length: 254 }),
+	email: text('email', { length: 320 }),
+	emailVerified: integer('email_verified', { mode: 'boolean' })
 });
 
 export const userRelations = relations(user, ({ many }) => ({
 	notes: many(campaignNotes)
 }));
 
-export const userKey = mysqlTable('user_key', {
-	id: varchar('id', {
+export const userKey = sqliteTable('user_key', {
+	id: text('id', {
 		length: 255
 	}).primaryKey(),
-	userId: varchar('user_id', {
+	userId: text('user_id', {
 		length: 15
 	})
 		.notNull()
 		.references(() => user.id),
-	hashedPassword: varchar('hashed_password', {
+	hashedPassword: text('hashed_password', {
 		length: 255
 	})
 });
 
-export const userSession = mysqlTable('user_session', {
-	id: varchar('id', {
+export const userSession = sqliteTable('user_session', {
+	id: text('id', {
 		length: 128
 	}).primaryKey(),
-	userId: varchar('user_id', {
+	userId: text('user_id', {
 		length: 15
 	})
 		.notNull()
 		.references(() => user.id),
-	activeExpires: bigint('active_expires', {
-		mode: 'number'
+	activeExpires: blob('active_expires', {
+		mode: 'bigint'
 	}).notNull(),
-	idleExpires: bigint('idle_expires', {
-		mode: 'number'
+	idleExpires: blob('idle_expires', {
+		mode: 'bigint'
 	}).notNull()
 });
 
-export const campaign = mysqlTable('campaign', {
-	id: varchar('id', { length: 256 }).primaryKey(),
-	dungeonMasterId: varchar('dungeon_master_id', { length: 15 })
+export const campaign = sqliteTable('campaign', {
+	id: text('id', { length: 256 }).primaryKey(),
+	dungeonMasterId: text('dungeon_master_id', { length: 15 })
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
-	name: varchar('name', { length: 256 }).notNull(),
-	status: mysqlEnum('status', [
-		'not_started',
-		'started',
-		'paused',
-		'ongoing',
-		'finished'
-	]).notNull(),
+	name: text('name', { length: 256 }).notNull(),
+	status: text('status', {
+		enum: ['not_started', 'started', 'paused', 'ongoing', 'finished']
+	}).notNull(),
 	description: text('description'),
-	bannerUrl: varchar('banner_url', { length: 256 })
+	bannerUrl: text('banner_url', { length: 256 })
 });
 
 export const campaignRelations = relations(campaign, ({ many }) => ({
@@ -81,12 +67,12 @@ export const campaignRelations = relations(campaign, ({ many }) => ({
 	campaignInvites: many(campaignInvite)
 }));
 
-export const campaignSession = mysqlTable(
+export const campaignSession = sqliteTable(
 	'campaign_session',
 	{
-		sessionNumber: int('session_number').notNull(),
-		campaignId: varchar('campaign_id', { length: 256 }).notNull(),
-		date: timestamp('date').defaultNow()
+		sessionNumber: integer('session_number').notNull(),
+		campaignId: text('campaign_id', { length: 256 }).notNull(),
+		date: integer('date', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`)
 	},
 	(table) => {
 		return {
@@ -103,13 +89,13 @@ export const campaignSessionRelations = relations(campaignSession, ({ one, many 
 	notes: many(campaignNotes)
 }));
 
-export const campaignNotes = mysqlTable('campaign_note', {
-	id: varchar('id', { length: 256 }).primaryKey(),
-	title: varchar('title', { length: 256 }),
+export const campaignNotes = sqliteTable('campaign_note', {
+	id: text('id', { length: 256 }).primaryKey(),
+	title: text('title', { length: 256 }),
 	text: text('text').notNull(),
-	sessionNumber: int('session_number').notNull(),
-	campaignId: varchar('campaign_id', { length: 256 }).notNull(),
-	authorId: varchar('author_id', { length: 15 })
+	sessionNumber: integer('session_number').notNull(),
+	campaignId: text('campaign_id', { length: 256 }).notNull(),
+	authorId: text('author_id', { length: 15 })
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' })
 });
@@ -125,18 +111,18 @@ export const campaignNotesRelations = relations(campaignNotes, ({ one }) => ({
 	})
 }));
 
-export const campaignInvite = mysqlTable(
+export const campaignInvite = sqliteTable(
 	'campaign_invite',
 	{
-		campaignId: varchar('campaign_id', { length: 256 })
+		campaignId: text('campaign_id', { length: 256 })
 			.notNull()
 			.references(() => campaign.id, { onDelete: 'cascade' }),
-		invitedUserId: varchar('invited_user_id', {
+		invitedUserId: text('invited_user_id', {
 			length: 15
 		})
 			.notNull()
 			.references(() => user.id, { onDelete: 'cascade' }),
-		status: mysqlEnum('status', ['declined', 'accepted', 'sent']).default('sent')
+		status: text('status', { enum: ['declined', 'accepted', 'sent'] }).default('sent')
 	},
 	(table) => {
 		return {

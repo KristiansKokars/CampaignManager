@@ -5,9 +5,10 @@ import type { Config } from 'drizzle-kit';
 export default {
 	schema: './src/lib/server/data/schema.ts',
 	out: './drizzle',
-	driver: 'mysql2',
+	driver: 'turso',
 	dbCredentials: {
-		uri: process.env.DATABASE_URL
+		url: process.env.DATABASE_URL,
+		authToken: process.env.DATABASE_TOKEN
 	},
 	tablesFilter: [`${tablePrefix}*`]
 } satisfies Config;

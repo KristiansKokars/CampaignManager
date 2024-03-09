@@ -1,11 +1,11 @@
-import { drizzle } from 'drizzle-orm/mysql2';
-import mysql from 'mysql2/promise';
-import { DATABASE_URL } from '$env/static/private';
+import { drizzle } from 'drizzle-orm/libsql';
+import { DATABASE_URL, DATABASE_TOKEN } from '$env/static/private';
+import { createClient } from '@libsql/client';
 import * as schema from './schema';
 
-export const connection = await mysql.createConnection({
-	uri: DATABASE_URL
+export const connection = createClient({
+	url: DATABASE_URL,
+	authToken: DATABASE_TOKEN
 });
 
-// TODO: mode from .env
-export const db = drizzle(connection, { mode: 'planetscale', schema });
+export const db = drizzle(connection, { schema });

@@ -10,8 +10,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"db:push": "drizzle-kit push:mysql",
-		"db:generate": "drizzle-kit generate:mysql",
+		"db:push": "drizzle-kit push:sqlite",
+		"db:generate": "drizzle-kit generate:sqlite",
 		"db:studio": "drizzle-kit studio"
 	},
 	"devDependencies": {
@@ -43,7 +43,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@lucia-auth/adapter-mysql": "^2.1.0",
+		"@libsql/client": "^0.5.3",
+		"@lucia-auth/adapter-sqlite": "^2.0.0",
 		"@lucia-auth/oauth": "^3.5.1",
 		"@types/node": "^20.11.5",
 		"@upstash/ratelimit": "^1.0.0",
@@ -54,7 +55,6 @@
 		"dotenv": "^16.3.1",
 		"drizzle-orm": "^0.29.3",
 		"lucia": "^2.7.6",
-		"mysql2": "^3.6.5",
 		"nanoid": "^5.0.4",
 		"pusher": "^5.2.0",
 		"pusher-js": "8.4.0-rc2",
