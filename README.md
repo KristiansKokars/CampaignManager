@@ -19,7 +19,7 @@
 - Zod
 - Cloudinary
 - Planetscale
-- Vercel
+- Turso
 
 ## Developing
 
@@ -31,19 +31,13 @@ pnpm i
 
 2. Copy the .env.example file to .env, change variables if you need to, otherwise it will run with the local Docker setup
 
-3. Start up the local MySQL server if you are using Docker
-
-```bash
-docker-compose up -d
-```
-
-4. Push the database schema
+3. Push the database schema
 
 ```bash
 pnpm db:push
 ```
 
-5. Run the SvelteKit project!
+4. Run the SvelteKit project!
 
 ```bash
 pnpm run dev
