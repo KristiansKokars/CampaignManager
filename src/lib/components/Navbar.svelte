@@ -2,13 +2,15 @@
 	import { enhance } from '$app/forms';
 	import { navigating, page } from '$app/stores';
 	import { cn } from '$lib/util/cn';
-	import InviteButton from '$lib/components/buttons/InviteButton.svelte';
+	import InviteButton from '$src/lib/components/invite/InviteButton.svelte';
 	import LinearLoadingIndicator from '$lib/components/LinearLoadingIndicator.svelte';
 	import NavlinkButton from '$lib/components/NavlinkButton.svelte';
 	import type { Navigation } from '@sveltejs/kit';
+	import type { CampaignInviteDTO } from '../server/data/queries/campaign-invites';
 
 	export let isLoggedIn: boolean = false;
 	export let hasUncheckedCampaignInvites: boolean;
+	export let campaignInvites: CampaignInviteDTO[];
 
 	const links = [
 		{
@@ -78,7 +80,8 @@
 						Register
 					</a>
 				{:else}
-					<InviteButton {hasUncheckedCampaignInvites} />
+					<InviteButton {hasUncheckedCampaignInvites} {campaignInvites} />
+
 					<form method="POST" class="flex gap-x-4" action="/signout?" use:enhance>
 						<button class="hover:text-opacity-8 text-red-400 text-opacity-90 hover:text-red-300">
 							Sign out

@@ -36,6 +36,7 @@
 		<Navbar
 			isLoggedIn={data.isLoggedIn}
 			hasUncheckedCampaignInvites={data.hasUncheckedCampaignInvites}
+			campaignInvites={data.campaignInvites}
 		/>
 		<enhanced:img src={DragonImage} class="h-lvh w-full object-cover object-center" alt="" />
 		<main class="flex grow flex-col">
