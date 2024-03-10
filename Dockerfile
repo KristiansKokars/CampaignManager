@@ -10,4 +10,4 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm build
 
-CMD [ "node", "build/index.js" ]
+CMD [ "node", "-r dotenv/config build/index.js" ]
