@@ -3,6 +3,10 @@ declare global {
 		interface Locals {
 			auth: import('lucia').AuthRequest;
 		}
+
+		interface PageState {
+			showModal: boolean;
+		}
 	}
 	namespace Lucia {
 		type Auth = import('$lib/server/features/auth/lucia').Auth;
